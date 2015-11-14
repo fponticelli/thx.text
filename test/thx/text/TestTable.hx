@@ -15,4 +15,12 @@ class TestTable {
     Assert.equals(6, table.rows);
     Assert.equals(6, table.cols);
   }
+
+  public function testToString() {
+    var table = new Table();
+    table.set(Cell.string("X"), 0, 0);
+    table.set(Cell.int(1), 1, 1);
+    table.set(Cell.float(0.1), 2, 2);
+    trace("\n"+table.toString());
+  }
 }

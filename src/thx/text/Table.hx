@@ -14,18 +14,20 @@ import thx.format.DateFormat;
 import thx.format.TimeFormat;
 
 class Table {
-/*
   public static var defaultCulture : Culture = thx.culture.Embed.culture("En-US");
-  public static var defaultFormat : CellValue -> Culture -> StringBlock = function(value, culture) {
+  public static var defaultFormat : CellValue -> Int -> StringBlock = function(value, maxWidth) {
     switch value {
-      case StringCell(v): return StringBlock.fromString(v);
+      case StringCell(v):
+        if(maxWidth > 0)
+          v = v.wrapColumns(maxWidth);
+        return StringBlock.fromString(v);
       case _: // do nothing
     }
     var s = switch value {
       case IntCell(v):
-        NumberFormat.integer(v, culture);
+        NumberFormat.integer(v, defaultCulture);
       case FloatCell(v):
-        NumberFormat.number(v, 2, culture);
+        NumberFormat.number(v, 2, defaultCulture);
       case StringCell(v):
         v;
       case BoolCell(v):
@@ -34,16 +36,18 @@ class Table {
       case DateCell(v):
         v.toString();
       case DateTimeCell(v):
-        DateFormat.iso8601(v, culture);
+        DateFormat.iso8601(v, defaultCulture);
       case TimeCell(v):
-        TimeFormat.timeLong(v, culture);
+        TimeFormat.timeLong(v, defaultCulture);
       case NA:
         // TODO, better symbol
         "NA";
+      case Empty:
+        "";
     };
     return new StringBlock([s]);
   };
-*/
+
   public var rows(default, null) : Int;
   public var cols(default, null) : Int;
   public var values : Map<Int, Map<Int, Cell>>;
@@ -69,8 +73,74 @@ class Table {
   }
 
   public function toString() : String {
-    return null;
+    var formatters = buildMatrix(rows, cols, function(_, _) return defaultFormat);
+    var sizes = buildMatrix(rows, cols, function(_, _) return { width : 0, height : 0 });
+    var cells = buildMatrix(rows, cols, function(r, c) return get(r, c));
+    var haligns = buildMatrix(rows, cols, function(_, _) : HAlign return Center);
+    var valigns = buildMatrix(rows, cols, function(_, _) : VAlign return Top);
+    var isBody = buildMatrix(rows, cols, function(_, _) return true);
+    var maxWidths = buildMatrix(rows, cols, function(_, _) return 0);
+    var values = buildMatrix(rows, cols, function(r, c) {
+      return formatters[r][c](cells[r][c].value, maxWidths[r][c]);
+    });
+    var colWidths = [];
+    for(c in 0...cols) {
+      var width = 0;
+      for(r in 0...rows) {
+        width = width.max(values[r][c].width);
+      }
+      colWidths[c] = width;
+    }
+    var rowHeights = [];
+    for(c in 0...cols) {
+      var height = 0;
+      for(r in 0...rows) {
+        height = height.max(values[r][c].height);
+      }
+      rowHeights[c] = height;
+    }
+
+    var buf = [];
+    for(r in 0...rows) {
+      // line above
+      // content
+      var lines = rowHeights[r];
+      //width : Int, halign : HAlign, valign : VAlign, totalLines : Int, symbolFromRight : Int
+      for(line in 0...lines) {
+        var items = [];
+        buf.push(items);
+        for(c in 0...cols) {
+          var s = values[r][c].getLine(line,
+                    colWidths[c],
+                    haligns[r][c],
+                    valigns[r][c],
+                    lines,
+                    0
+                  );
+          trace(values[r][c]);
+          trace(s);
+          items.push(s);
+        }
+      }
+    }
+    // line below
+
+    return buf.map(function(line) return line.join(" ")).join("\n");
   }
+/*
+
+*=====*============*
+| 0-0 |    0-1     |
+*=====*============*
+| 1-0 |    1-1     |
+*-----*------------*
+| 2-0 |    2-1     |
+*-----*------------*
+
+*/
+
+  static function buildMatrix<T>(rows : Int, cols : Int, fvalue : Int -> Int -> T) : Array<Array<T>>
+    return [for(r in 0...rows) [for(c in 0...cols) fvalue(r, c)]];
 
   // format value (with filling)
   // align value horizontal
@@ -112,23 +182,23 @@ class StringBlock {
       case Bottom:
         lines[line - (totalLines - lines.length)];
     };
+
     if(null == value)
       value = "";
-
     return switch halign {
-    case Left:
-      value.rpad(" ", width);
-    case Right:
-      value.lpad(" ", width);
-    case Center:
-      var len = Utf8.length(value),
-          space = width - len,
-          left = Math.ceil(space / 2);
-      value.lpad(" ", left + len).rpad(" ", width);
-    case OnSymbol(symbol):
-      var len = Utf8.length(value),
-          pos = len - value.lastIndexOf(symbol);
-      value.rpad(" ", len + symbolFromRight - pos).lpad(" ", width);
+      case Left:
+        value.rpad(" ", width);
+      case Right:
+        value.lpad(" ", width);
+      case Center:
+        var len = Utf8.length(value),
+            space = width - len,
+            left = Math.ceil(space / 2);
+        value.lpad(" ", left + len).rpad(" ", width);
+      case OnSymbol(symbol):
+        var len = Utf8.length(value),
+            pos = len - value.lastIndexOf(symbol);
+        value.rpad(" ", len + symbolFromRight - pos).lpad(" ", width);
     };
   }
 
