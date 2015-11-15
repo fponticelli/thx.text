@@ -87,7 +87,19 @@ class Table {
     for(c in 0...cols) {
       var width = 0;
       for(r in 0...rows) {
-        width = width.max(values[r][c].width);
+        var spanWidth = cells[r][c].spanWidth();
+        if(spanWidth > 1) {
+          var cellWidth = values[r][c].width,
+              spansMin = Math.floor(cellWidth / spanWidth),
+              spansMax = Math.ceil(cellWidth / spanWidth);
+
+          values[r][c+1].width = spansMax;
+          for(i in 1...spanWidth) {
+            values[r][c+i+1].width = spansMin;
+          }
+        } else {
+          width = width.max(values[r][c].width);
+        }
       }
       colWidths[c] = width;
     }
@@ -117,8 +129,6 @@ class Table {
                     lines,
                     0
                   );
-          trace(values[r][c]);
-          trace(s);
           items.push(s);
         }
       }
@@ -163,8 +173,8 @@ class StringBlock {
   }
 
   var lines : Array<String>;
-  public var width(default, null) : Int;
-  public var height(default, null) : Int;
+  public var width : Int;
+  public var height : Int;
 
   public function new(lines : Array<String>) {
     this.lines = lines;
