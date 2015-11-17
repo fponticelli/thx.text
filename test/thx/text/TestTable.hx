@@ -29,8 +29,40 @@ class TestTable {
     Assert.equals(4, table.rows);
   }
 
-  public function testIdentityOfReferrableEntities() {
+  public function testIdentityOfCellsCreatedFromTable() {
     var cell = table.set(IntCell(1), 3, 2);
+    Assert.isTrue(cell == table.get(3, 2));
+
+    Assert.isTrue(cell == table.getRow(3).get(2));
+    Assert.isTrue(cell == table.getCol(2).get(3));
+
+    Assert.isTrue(cell.row == table.getRow(3));
+    Assert.isTrue(cell.col == table.getCol(2));
+
+    Assert.isTrue(cell.table == table);
+    Assert.isTrue(cell.row.table == table);
+    Assert.isTrue(cell.col.table == table);
+  }
+
+  public function testIdentityOfCellsCreatedFromRow() {
+    var row = table.ensureRow(3),
+        cell = row.set(IntCell(1), 2);
+    Assert.isTrue(cell == table.get(3, 2));
+
+    Assert.isTrue(cell == table.getRow(3).get(2));
+    Assert.isTrue(cell == table.getCol(2).get(3));
+
+    Assert.isTrue(cell.row == table.getRow(3));
+    Assert.isTrue(cell.col == table.getCol(2));
+
+    Assert.isTrue(cell.table == table);
+    Assert.isTrue(cell.row.table == table);
+    Assert.isTrue(cell.col.table == table);
+  }
+
+  public function testIdentityOfCellsCreatedFromCol() {
+    var col = table.ensureCol(2),
+        cell = col.set(IntCell(1), 3);
     Assert.isTrue(cell == table.get(3, 2));
 
     Assert.isTrue(cell == table.getRow(3).get(2));

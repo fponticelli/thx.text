@@ -15,14 +15,14 @@ class Table {
     _cols = [];
   }
 
-  @:access(thx.text.table.Col.set)
+  @:access(thx.text.table.Col.setCell)
   public function set(value : CellValue, row : Int, col : Int, ?span : Span) {
     if(null == span)
       span = NoSpan;
     var r = ensureRow(row),
         c = ensureCol(col),
         cell = new Cell(value, r, c, span);
-    c.set(row, cell);
+    c.setCell(row, cell);
     return cell;
   }
 
