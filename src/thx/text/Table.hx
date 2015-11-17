@@ -2,10 +2,12 @@ package thx.text;
 
 import thx.ReadonlyArray;
 import thx.text.table.*;
+import thx.text.table.Style;
 
 class Table {
   public var rows(get, set) : Int;
   public var cols(get, set) : Int;
+  public var style(default, null) : IStyle;
 
   var _rows : Array<Row>;
   var _cols : Array<Col>;
@@ -13,6 +15,7 @@ class Table {
   public function new() {
     _rows = [];
     _cols = [];
+    style = new Style();
   }
 
   @:access(thx.text.table.Col.setCell)
