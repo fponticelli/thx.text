@@ -1,10 +1,16 @@
 package thx.text.table;
 
 class Cell {
-  var row : Row;
-  var col : Column;
-  public function new(row : Row, col : Column) {
+  public var value(default, null) : CellValue;
+  public var row(default, null) : Row;
+  public var col(default, null) : Col;
+  public var span(default, null) : Span;
+  public var table(default, null) : Table;
+  public function new(value : CellValue, row : Row, col : Col, span : Span) {
+    this.value = value;
     this.row = row;
     this.col = col;
+    this.span = span;
+    this.table = col.table;
   }
 }

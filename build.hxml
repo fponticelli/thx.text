@@ -6,5 +6,6 @@
 -lib utest
 -main TestAll
 -js bin/test.js
+-debug
 
 -cmd node bin/test.js

@@ -1,3 +1,5 @@
+package thx.text.table;
+
 typedef CellBorders = {
   horizontal : String,
   vertical : String,
@@ -5,6 +7,7 @@ typedef CellBorders = {
   bottomRight : String,
   topLeft : String,
   topRight : String,
+  cross : String,
   crossBottom : String,
   crossTop : String,
   crossLeft : String,
@@ -30,6 +33,7 @@ class DefaultBorders {
     bottomRight : "┛",
     topLeft : "┏",
     topRight : "┓",
+    cross : "╋",
     crossBottom : "┳",
     crossTop : "┻",
     crossLeft : "┫",
@@ -39,11 +43,11 @@ class DefaultBorders {
   public static var body : CellBorders = {
     horizontal : "─",
     vertical : "│",
-    bottom : "",
     bottomLeft : "└",
     bottomRight : "┘",
     topLeft : "┌",
     topRight : "┐",
+    cross : "┼",
     crossBottom : "┬",
     crossTop : "┴",
     crossLeft : "┤",
