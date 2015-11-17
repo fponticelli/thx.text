@@ -11,6 +11,13 @@ class TestTable {
     table = new Table();
   }
 
+  public function testCanvas() {
+    var canvas = new thx.text.table.Canvas(3, 2);
+    Assert.equals("   \n   ", canvas.toString());
+    canvas.expand(4, 3);
+    Assert.equals("    \n    \n    ", canvas.toString());
+  }
+
   public function testTableSize() {
     Assert.equals(0, table.rows);
     Assert.equals(0, table.cols);
