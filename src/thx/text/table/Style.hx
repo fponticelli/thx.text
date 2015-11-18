@@ -6,6 +6,7 @@ using thx.format.NumberFormat;
 using thx.format.TimeFormat;
 using thx.culture.Culture;
 using thx.culture.Embed;
+import thx.text.table.CellValue;
 
 class Style implements IStyle {
   @:isVar public var border(get, set) : BorderStyle;
@@ -94,9 +95,8 @@ class DefaultStyle implements IStyle {
   public static var defaultFloatFormatter : Float -> String = function(v : Float) return NumberFormat.number(v, 2, defaultCulture);
   public static var defaultStringFormatter : String -> String = function(v : String) return v;
   // TODO, change to Utf8 chars
-  public static var defaultBoolFormatter : Bool -> String = function(v : Bool) return v ? "T" : "F";
-  public static var defaultDateFormatter : Date -> String = function(v : Date) return v.toString();
-  public static var defaultDateTimeFormatter : DateTime -> String = function(v : DateTime) return DateFormat.iso8601(v, defaultCulture);
+  public static var defaultBoolFormatter : Bool -> String = function(v : Bool) return v ? "✓" : "✕";
+  public static var defaultDateTimeFormatter : DateTime -> String = function(v : DateTime) return DateFormat.dateShort(v, defaultCulture);
   public static var defaultTimeFormatter : Time -> String = function(v : Time) return TimeFormat.timeLong(v, defaultCulture);
   // TODO, better symbol
   public static var defaultNAFormatter : Void -> String = function() return "NA";
@@ -114,7 +114,6 @@ class DefaultStyle implements IStyle {
       case FloatCell(v): defaultFloatFormatter(v);
       case StringCell(v): defaultStringFormatter(v);
       case BoolCell(v): defaultBoolFormatter(v);
-      case DateCell(v): defaultDateFormatter(v);
       case DateTimeCell(v): defaultDateTimeFormatter(v);
       case TimeCell(v): defaultTimeFormatter(v);
       case NA: defaultNAFormatter();

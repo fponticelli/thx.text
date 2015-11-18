@@ -15,9 +15,20 @@ class TestTable {
 
   public function testRender() {
     var renderer = new Renderer();
-    table.set(IntCell(200), 1, 2);
+    table.set(true, 0, 1);
+    table.set("Franco", 0, 0);
+    table.set(false, 0, 2);
+    table.set(Date.now(), 1, 0);
+    table.set(200, 1, 2);
     var s = renderer.render(table);
-    trace(s);
+    trace('\n$s');
+  }
+
+  public function testSequence() {
+    var last = table.set(true, 0, 1);
+    var first = table.set(false, 0, 0);
+    Assert.equals(1, last.col.index);
+    Assert.equals(0, first.col.index);
   }
 
   public function testStyle() {
@@ -51,13 +62,13 @@ class TestTable {
   }
 
   public function testCellResizeTable() {
-    table.set(IntCell(1), 3, 2);
+    table.set(1, 3, 2);
     Assert.equals(3, table.cols);
     Assert.equals(4, table.rows);
   }
 
   public function testIdentityOfCellsCreatedFromTable() {
-    var cell = table.set(IntCell(1), 3, 2);
+    var cell = table.set(1, 3, 2);
     Assert.isTrue(cell == table.get(3, 2));
 
     Assert.isTrue(cell == table.getRow(3).get(2));
@@ -73,7 +84,7 @@ class TestTable {
 
   public function testIdentityOfCellsCreatedFromRow() {
     var row = table.ensureRow(3),
-        cell = row.set(IntCell(1), 2);
+        cell = row.set(1, 2);
     Assert.isTrue(cell == table.get(3, 2));
 
     Assert.isTrue(cell == table.getRow(3).get(2));
@@ -89,7 +100,7 @@ class TestTable {
 
   public function testIdentityOfCellsCreatedFromCol() {
     var col = table.ensureCol(2),
-        cell = col.set(IntCell(1), 3);
+        cell = col.set(1, 3);
     Assert.isTrue(cell == table.get(3, 2));
 
     Assert.isTrue(cell == table.getRow(3).get(2));

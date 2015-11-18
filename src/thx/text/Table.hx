@@ -37,13 +37,13 @@ class Table {
 
   public function ensureCol(index : Int) : Col {
     for(i in _cols.length...index+1)
-      _cols[i] = new Col(this, index);
+      _cols[i] = new Col(this, i);
     return _cols[index];
   }
 
   public function ensureRow(index : Int) : Row {
     for(i in _rows.length...index+1)
-      _rows[i] = new Row(this, index);
+      _rows[i] = new Row(this, i);
     return _rows[index];
   }
 
@@ -68,12 +68,12 @@ class Table {
     return _cols.length;
 
   function set_rows(value : Int) {
-    ensureRow(value);
+    ensureRow(value + 1);
     return value;
   }
 
   function set_cols(value : Int) {
-    ensureCol(value);
+    ensureCol(value + 1);
     return value;
   }
 }

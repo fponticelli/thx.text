@@ -39,8 +39,11 @@ class Canvas {
   }
 
   public function set(x : Int, y : Int, symbol : Symbol) {
-    expand(x+1, y+1);
     values[y][x] = symbol;
+  }
+
+  public function setChar(x : Int, y : Int, char : String) {
+    set(x, y, Char(char));
   }
 
   public function combine(x : Int, y : Int, symbol : Symbol) {
@@ -48,31 +51,48 @@ class Canvas {
     values[y][x] = values[y][x].combine(symbol);
   }
 
+  public function combineChar(x : Int, y : Int, char : String) {
+    combine(x, y, Char(char));
+  }
+
+  public function paintBlock(block : StringBlock, x : Int, y : Int) {
+    for(i in 0...block.height) {
+      var line = block.getLine(i);
+      for(j in 0...line.length) {
+        setChar(x + j, y + i, line[j]);
+      }
+    }
+  }
+
   public function render(symbol : Symbol)
     return switch symbol {
+      case Removable: render(Empty);
       case Empty: " ";
       case Char(c): c;
     };
 
   public function toString() {
-    return values.map(function(row) {
-      return row.reduce(function(buff, symbol) {
-        return buff + render(symbol);
-      }, "");
-    }).join("\n");
+    return values
+      .filter(function(row) {
+        return !row.all(function(symbol) return Type.enumEq(symbol, Removable));
+      })
+      .map(function(row) {
+        return row.reduce(function(buff, symbol) {
+          return buff + render(symbol);
+        }, "");
+      }).join("\n");
   }
 }
 
 abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
   public function combine(other : Symbol) : Symbol
     return switch [this, other] {
-      case [Empty, _]: other;
-      case [_, Char(_)]: other;
-      case [_, Empty]: this;  // don't override?
+      case [_, _]: other; // TODO don't override?
     };
 }
 
 enum SymbolImpl {
+  Removable;
   Empty;
   Char(s : String);
 }

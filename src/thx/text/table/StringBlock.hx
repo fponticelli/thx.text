@@ -24,6 +24,12 @@ class StringBlock {
     this.width = lines.reduce(function(width : Int, line) return width.max(Utf8.length(line)), 0);
     this.height = lines.length;
   }
+
+  public function getLine(index : Int) {
+    if(index >= height)
+      return [];
+    return lines[index].toArray();
+  }
 /*
   public function getLine(line : Int, width : Int, halign : HAlign, valign : VAlign, totalLines : Int, symbolFromRight : Int) {
     var value = switch valign {
