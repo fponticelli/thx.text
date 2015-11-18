@@ -6,6 +6,8 @@ class Cell {
   public var value(default, null) : CellValue;
   public var row(default, null) : Row;
   public var col(default, null) : Col;
+  public var rowIndex(get, null) : Int;
+  public var colIndex(get, null) : Int;
   public var span(default, null) : Span;
   public var table(default, null) : Table;
   public var style(default, null) : IStyle;
@@ -18,7 +20,16 @@ class Cell {
     this.style = new CompositeStyle([col.style, row.style, table.style, DefaultStyle.instance]);
   }
 
-  public function getWidth() {
-
+  public function toString() : String {
+    var maxWidth = style.maxWidth;
+    trace(maxWidth);
+    trace(style.formatter);
+    return style.formatter(value, maxWidth).toString();
   }
+
+  function get_rowIndex()
+    return row.index;
+
+  function get_colIndex()
+    return col.index;
 }

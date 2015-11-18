@@ -2,6 +2,8 @@ package thx.text;
 
 import utest.Assert;
 using thx.text.Table;
+using thx.text.table.Renderer;
+using thx.text.table.Style;
 
 class TestTable {
   public function new() { }
@@ -9,6 +11,24 @@ class TestTable {
   var table : Table;
   public function setup() {
     table = new Table();
+  }
+
+  public function testRender() {
+    var renderer = new Renderer();
+    table.set(IntCell(200), 1, 2);
+    var s = renderer.render(table);
+    trace(s);
+  }
+
+  public function testStyle() {
+    var style = new Style();
+    Assert.isNull(style.formatter);
+    var dstyle = new DefaultStyle();
+    Assert.notNull(dstyle.formatter);
+    var cstyle = new CompositeStyle([style]);
+    Assert.isNull(cstyle.formatter);
+    cstyle = new CompositeStyle([style, dstyle]);
+    Assert.notNull(cstyle.formatter);
   }
 
   public function testCanvas() {

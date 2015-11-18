@@ -43,9 +43,9 @@ class Canvas {
     values[y][x] = symbol;
   }
 
-  public function upgrade(x : Int, y : Int, symbol : Symbol) {
+  public function combine(x : Int, y : Int, symbol : Symbol) {
     expand(x+1, y+1);
-    values[y][x] = values[y][x].upgrade(symbol);
+    values[y][x] = values[y][x].combine(symbol);
   }
 
   public function render(symbol : Symbol)
@@ -64,7 +64,7 @@ class Canvas {
 }
 
 abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
-  public function upgrade(other : Symbol) : Symbol
+  public function combine(other : Symbol) : Symbol
     return switch [this, other] {
       case [Empty, _]: other;
       case [_, Char(_)]: other;

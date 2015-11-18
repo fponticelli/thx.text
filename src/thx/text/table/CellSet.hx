@@ -18,9 +18,11 @@ class CellSet {
     this.style = new Style();
   }
 
-  public function get(index : Int) {
+  public function get(index : Int)
     return values.get(index);
-  }
+
+  public function iterator() : Iterator<Cell>
+    return values.iterator();
 
   function _set(index : Int, cell : Cell) {
     size = index.max(size);

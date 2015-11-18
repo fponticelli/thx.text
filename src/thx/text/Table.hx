@@ -53,6 +53,14 @@ class Table {
   public function getRow(index : Int) : Null<Row>
     return _rows[index];
 
+  public function toArray() : Array<Cell> {
+    var collector = [];
+    for(row in _rows)
+      for(cell in row)
+        collector.push(cell);
+    return collector;
+  }
+
   function get_rows()
     return _rows.length;
 
