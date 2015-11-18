@@ -30,37 +30,7 @@ class StringBlock {
       return [];
     return lines[index].toArray();
   }
-/*
-  public function getLine(line : Int, width : Int, halign : HAlign, valign : VAlign, totalLines : Int, symbolFromRight : Int) {
-    var value = switch valign {
-      case Top:
-        lines[line];
-      case Center:
-        var mid = Math.floor(totalLines / 2);
-        lines[line - (mid - lines.length)];
-      case Bottom:
-        lines[line - (totalLines - lines.length)];
-    };
 
-    if(null == value)
-      value = "";
-    return switch halign {
-      case Left:
-        value.rpad(" ", width);
-      case Right:
-        value.lpad(" ", width);
-      case Center:
-        var len = Utf8.length(value),
-            space = width - len,
-            left = Math.ceil(space / 2);
-        value.lpad(" ", left + len).rpad(" ", width);
-      case OnSymbol(symbol):
-        var len = Utf8.length(value),
-            pos = len - value.lastIndexOf(symbol);
-        value.rpad(" ", len + symbolFromRight - pos).lpad(" ", width);
-    };
-  }
-*/
   public function toString() {
     return lines.join("\n");
   }

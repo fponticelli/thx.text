@@ -94,11 +94,9 @@ class DefaultStyle implements IStyle {
   public static var defaultIntFormatter : Int -> String = function(v : Int) return NumberFormat.integer(v, defaultCulture);
   public static var defaultFloatFormatter : Float -> String = function(v : Float) return NumberFormat.number(v, 2, defaultCulture);
   public static var defaultStringFormatter : String -> String = function(v : String) return v;
-  // TODO, change to Utf8 chars
   public static var defaultBoolFormatter : Bool -> String = function(v : Bool) return v ? "✓" : "✕";
   public static var defaultDateTimeFormatter : DateTime -> String = function(v : DateTime) return DateFormat.dateShort(v, defaultCulture);
   public static var defaultTimeFormatter : Time -> String = function(v : Time) return TimeFormat.timeLong(v, defaultCulture);
-  // TODO, better symbol
   public static var defaultNAFormatter : Void -> String = function() return "NA";
   public static var defaultEmptyFormatter : Void -> String = function() return "";
   public static var defaultFormatter : Formatter = function(value : CellValue, maxWidth : Null<Int>) {
