@@ -2,6 +2,7 @@ package thx.text;
 
 import utest.Assert;
 using thx.text.Table;
+using thx.text.table.Canvas;
 using thx.text.table.Renderer;
 using thx.text.table.Style;
 
@@ -11,6 +12,20 @@ class TestTable {
   var table : Table;
   public function setup() {
     table = new Table();
+  }
+
+  public function testPaintBorder() {
+    var canvas = new Canvas(3, 3);
+    canvas.paintBorder(Body, 0, 0, 3, 3);
+    Assert.equals('┌─┐\n│ │\n└─┘', canvas.toString());
+
+    canvas = new Canvas(4, 4);
+    canvas.paintBorder(Body, 1, 0, 3, 3);
+    Assert.equals(' ┌─┐\n │ │\n └─┘\n    ', canvas.toString());
+
+    canvas = new Canvas(4, 4);
+    canvas.paintBorder(Body, 1, 1, 3, 3);
+    Assert.equals('    \n ┌─┐\n │ │\n └─┘', canvas.toString());
   }
 
   public function testRender() {

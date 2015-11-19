@@ -9,17 +9,17 @@ using thx.culture.Embed;
 import thx.text.table.CellValue;
 
 class Style implements IStyle {
-  @:isVar public var border(get, set) : BorderStyle;
+  @:isVar public var type(get, set) : CellType;
   @:isVar public var maxHeight(get, set) : Null<Int>;
   @:isVar public var maxWidth(get, set) : Null<Int>;
   @:isVar public var formatter(get, set) : Formatter;
   public function new() {}
 
-  function get_border()
-    return border;
+  function get_type()
+    return type;
 
-  function set_border(value : BorderStyle)
-    return border = value;
+  function set_type(value : CellType)
+    return type = value;
 
   function get_maxHeight() : Null<Int>
     return maxHeight;
@@ -47,11 +47,11 @@ class CompositeStyle extends Style {
     this.parents = parents;
   }
 
-  override function get_border()
-    return getProperty("border");
+  override function get_type()
+    return getProperty("type");
 
-  override function set_border(value : BorderStyle)
-    return border = value;
+  override function set_type(value : CellType)
+    return type = value;
 
   override function get_maxHeight() : Null<Int>
     return getProperty("maxHeight");
@@ -87,7 +87,7 @@ class CompositeStyle extends Style {
 
 class DefaultStyle implements IStyle {
   public static var instance(default, null) : DefaultStyle = new DefaultStyle();
-  public static var defaultBorder : BorderStyle = Body;
+  public static var defaultType : CellType = BodyCompact;
   public static var defaultMaxHeight : Null<Int> = null;
   public static var defaultMaxWidth : Null<Int> = null;
   public static var defaultCulture : Culture = Embed.culture("en-us");
@@ -122,18 +122,18 @@ class DefaultStyle implements IStyle {
     return new StringBlock([s]);
   };
 
-  public var border(get, set) : BorderStyle;
+  public var type(get, set) : CellType;
   public var maxHeight(get, set) : Null<Int>;
   public var maxWidth(get, set) : Null<Int>;
   public var formatter(get, set) : Formatter;
 
   public function new() {}
 
-  function get_border() : BorderStyle
-    return defaultBorder;
+  function get_type() : CellType
+    return defaultType;
 
-  function set_border(value : BorderStyle) : BorderStyle
-    return defaultBorder = value;
+  function set_type(value : CellType) : CellType
+    return defaultType = value;
 
   function get_maxHeight() : Null<Int>
     return defaultMaxHeight;
@@ -155,16 +155,28 @@ class DefaultStyle implements IStyle {
 }
 
 interface IStyle {
-  public var border(get, set) : BorderStyle;
+  public var type(get, set) : CellType;
   public var maxWidth(get, set) : Null<Int>;
   public var maxHeight(get, set) : Null<Int>;
   public var formatter(get, set) : Formatter;
 }
 
-enum BorderStyle {
+enum CellType {
   Header;
+  HeaderCompact;
   Body;
+  BodyCompact;
+}
+
+enum BorderStyle {
   None;
+  Normal;
+  Double;
+}
+
+enum Border {
+  Removable;
+  Cross(top : BorderStyle, right : BorderStyle, bottom : BorderStyle, left : BorderStyle);
 }
 
 typedef Formatter = CellValue -> Null<Int> -> StringBlock;

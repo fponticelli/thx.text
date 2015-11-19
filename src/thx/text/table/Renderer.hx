@@ -55,7 +55,7 @@ class Renderer {
   function processContents() {
     colWidths = [for(i in 0...table.cols) 0];
     rowHeights = [for(i in 0...table.rows) 0];
-    var cells = table.toArray().order(function(a, b) return Enums.compare(b.style.border, a.style.border)),
+    var cells = table.toArray().order(function(a, b) return Enums.compare(b.style.type, a.style.type)),
         blocks = cells.map(function(cell) {
           var maxWidth = cell.style.maxWidth,
               maxHeight = cell.style.maxHeight; // TODO account for padding
@@ -80,8 +80,8 @@ class Renderer {
 
     blocks.each(function(item) {
       // get x, y
-      var x = colWidths.slice(0, item.cell.col.index).reduce(reduceWidth, 1 + padding),
-          y = rowHeights.slice(0, item.cell.row.index).reduce(reduceHeight, 1);
+      var x = colWidths.slice(0, item.cell.col.index).reduce(reduceWidth, 0),
+          y = rowHeights.slice(0, item.cell.row.index).reduce(reduceHeight, 0);
       // trace(item.block.toString());
       // trace(item.cell.col.index, item.cell.row.index);
       // trace(x, y);
@@ -91,9 +91,12 @@ class Renderer {
       // * consider max height and height
       // * consider valign
       // * consider halign
-      canvas.paintBlock(item.block, x, y);
+      canvas.paintBlock(item.block, x + 1 + padding, y + 1);
 
       // paint borders
+      var w = colWidths[item.cell.col.index] + (1 + padding) * 2,
+          h = rowHeights[item.cell.row.index] + 2;
+      canvas.paintBorder(item.cell.style.type, x, y, w, h);
     });
   }
 
