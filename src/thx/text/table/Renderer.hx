@@ -13,11 +13,6 @@ TODO
   ? fill right
   ? fill down
   ? fill
-  ? halign
-    ? left
-    ? right
-    ? center
-    ? symbol
   ? valign
     ? top
     ? middle
@@ -26,6 +21,7 @@ TODO
     ? crop
   ? maxwidth
     ? crop
+  ? helper methods
 */
 
 class Renderer {
@@ -95,8 +91,7 @@ class Renderer {
       // TODO
       // * consider max height and height
       // * consider valign
-      // * consider halign
-      // paint content
+      // * paint content
       canvas.paintBlock(item.block, x + 1 + padding, y + 1, width, item.halign, symbolPos[item.cell.col.index]);
 
       // paint borders

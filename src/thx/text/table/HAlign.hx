@@ -1,6 +1,6 @@
 package thx.text.table;
 
-enum CellAlign {
+enum HAlign {
   Left;
   Right;
   Center;

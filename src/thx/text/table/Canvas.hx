@@ -59,7 +59,7 @@ class Canvas {
     combine(x, y, Char(char));
   }
 
-  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, halign : CellAlign, symbolPos : Int) {
+  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, halign : HAlign, symbolPos : Int) {
     for(i in 0...block.height) {
       var line = block.getLine(i),
           len = line.length;

@@ -18,6 +18,9 @@ class Style implements IStyle {
   @:isVar public var aligner(get, set) : Aligner;
   public function new() {}
 
+  public function setAlign(align : HAlign)
+    aligner = function(_, _) return align;
+
   function get_type()
     return type;
 
@@ -188,6 +191,9 @@ class DefaultStyle implements IStyle {
 
   public function new() {}
 
+  public function setAlign(align : HAlign)
+    aligner = function(_, _) return align;
+
   function get_type() : CellType
     return defaultType;
 
@@ -239,6 +245,8 @@ interface IStyle {
   public var maxHeight(get, set) : Null<Int>;
   public var formatter(get, set) : Formatter;
   public var aligner(get, set) : Aligner;
+
+  public function setAlign(align : HAlign) : Void;
 }
 
 enum CellType {
@@ -260,4 +268,4 @@ enum Border {
 }
 
 typedef Formatter = CellValue -> Null<Int> -> StringBlock;
-typedef Aligner = CellValue -> CellType -> CellAlign;
+typedef Aligner = CellValue -> CellType -> HAlign;
