@@ -264,6 +264,7 @@ enum BorderStyle {
 
 enum Border {
   Removable;
+  RemovableCross(top : BorderStyle, right : BorderStyle, bottom : BorderStyle, left : BorderStyle);
   Cross(top : BorderStyle, right : BorderStyle, bottom : BorderStyle, left : BorderStyle);
 }
 

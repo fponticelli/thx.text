@@ -31,6 +31,23 @@ class TestTable {
     ];
     var table = Table.fromData(data, "average earnings");
     trace(table.toString());
+    Assert.equals("
+┏━━━━━━━━━━━━━━━━━━┓
+┃ average earnings ┃
+┣━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+┃ rank             ┃ country               ┃ US $    ┃
+┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+│                1 │ Luxembourg            │ 113,533 │
+│                2 │ Qatar                 │  98,329 │
+│                3 │ Norway                │  97,255 │
+│                4 │ Switzerland           │  81,161 │
+│                5 │ United Arab  Emirates │  67,008 │
+│                6 │ Australia             │  65,477 │
+│                7 │ Denmark               │  59,928 │
+│                8 │ Sweden                │  56,956 │
+│                9 │ Canada                │  50,436 │
+│               10 │ Netherlands           │  50,355 │
+└──────────────────┴───────────────────────┴─────────┘", table.toString());
   }
 
   public function testFromObjects() {
@@ -52,6 +69,16 @@ class TestTable {
     }];
     var table = Table.fromObjects(data, "countries");
     trace(table.toString());
+    Assert.equals("
+┏━━━━━━━━━━━━━┓
+┃  countries  ┃
+┣━━━━━━━━━━━━━╋━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃ countryCode ┃ latitude ┃ longitude ┃ name                 ┃
+┡━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ AD          │     42.5 │       1.6 │ Andorra              │
+│ AE          │     23.4 │      53.8 │ United Arab Emirates │
+│ AF          │     33.9 │      67.7 │ Afghanistan          │
+└─────────────┴──────────┴───────────┴──────────────────────┘", table.toString());
   }
 
   public function testPaintBorder() {
@@ -83,7 +110,7 @@ class TestTable {
 ┃ Franco     ┃ ✓ ┃  ✕  ┃
 ┡━━━━━━━━━━━━╇━━━╇━━━━━┩
 │ 11/19/2015 │   │ 200 │
-└────────────┘   └─────┘", s);
+└────────────┴───┴─────┘", s);
   }
 
   function oneCell(value : CellValue, width : Int) {

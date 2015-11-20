@@ -22,6 +22,7 @@ TODO
   ? maxwidth
     ? crop
   ? helper methods
+  ? add Removable(t,r,d,l)
 */
 
 class Renderer {
@@ -99,6 +100,7 @@ class Renderer {
           h = rowHeights[item.cell.row.index] + 2;
       canvas.paintBorder(item.cell.style.type, x, y, w, h);
     });
+    canvas.paintBottomLine(Body, 0, height-1, width);
     //canvas.paintBorder(Body, 0, 0, width, height);
   }
 
