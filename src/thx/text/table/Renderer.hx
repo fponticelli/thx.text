@@ -99,6 +99,7 @@ class Renderer {
           h = rowHeights[item.cell.row.index] + 2;
       canvas.paintBorder(item.cell.style.type, x, y, w, h);
     });
+    //canvas.paintBorder(Body, 0, 0, width, height);
   }
 
   function reduceWidth(acc : Int, width : Int) {

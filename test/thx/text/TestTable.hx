@@ -15,6 +15,45 @@ class TestTable {
     table = new Table();
   }
 
+  public function testFromData() {
+    var data : Array<Array<Dynamic>> = [
+      ["rank", "country", "US $"],
+      [1, "Luxembourg", 113533],
+      [2, "Qatar", 98329],
+      [3, "Norway", 97255],
+      [4, "Switzerland", 81161],
+      [5, "United Arab  Emirates", 67008],
+      [6, "Australia", 65477],
+      [7, "Denmark", 59928],
+      [8, "Sweden", 56956],
+      [9, "Canada", 50436],
+      [10, "Netherlands", 50355]
+    ];
+    var table = Table.fromData(data, "average earnings");
+    trace(table.toString());
+  }
+
+  public function testFromObjects() {
+    var data = [{
+        countryCode: "AD",
+        latitude: 42.5,
+        longitude: 1.6,
+        name: "Andorra"
+      }, {
+        countryCode: "AE",
+        latitude: 23.4,
+        longitude: 53.8,
+        name: "United Arab Emirates"
+      }, {
+        countryCode: "AF",
+        latitude: 33.9,
+        longitude: 67.7,
+        name: "Afghanistan"
+    }];
+    var table = Table.fromObjects(data, "countries");
+    trace(table.toString());
+  }
+
   public function testPaintBorder() {
     var canvas = new Canvas(3, 3);
     canvas.paintBorder(Body, 0, 0, 3, 3);

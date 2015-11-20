@@ -5,6 +5,52 @@ import thx.text.table.*;
 import thx.text.table.Style;
 
 class Table {
+  public static function fromData(data : Array<Array<Dynamic>>, ?hasHeader : Bool = true, ?title : String) {
+    var offset = title == null ? 0 : 1,
+        table = new Table();
+    if(hasHeader) {
+      table.ensureRow(offset).style.type = Header;
+    }
+    if(null != title) {
+      table.ensureRow(0).style.type = Header;
+      table.ensureRow(0).style.setAlign(Center);
+      table.set(title, 0, 0, FillRight);
+    }
+    for(r in 0...data.length) {
+      var row = data[r];
+      for(c in 0...row.length) {
+        table.set(CellValue.fromDynamic(row[c]), r + offset, c);
+      }
+    }
+    return table;
+  }
+
+  public static function fromObjects(data : Array<{}>, ?title : String) {
+    var offset = title == null ? 0 : 1,
+        table = new Table(),
+        headers = new Map(),
+        cols = 0;
+    if(null != title) {
+      table.ensureRow(0).style.type = Header;
+      table.ensureRow(0).style.setAlign(Center);
+      table.set(title, 0, 0, FillRight);
+    }
+    table.ensureRow(offset).style.type = Header;
+    for(r in 0...data.length) {
+      var fields = Reflect.fields(data[r]);
+      for(field in fields) {
+        var col = headers.get(field);
+        if(null == col) {
+          col = cols++;
+          headers.set(field, col);
+          table.set(field, offset, col);
+        }
+        table.set(CellValue.fromDynamic(Reflect.field(data[r], field)), r + offset + 1, col);
+      }
+    }
+    return table;
+  }
+
   public var rows(get, set) : Int;
   public var cols(get, set) : Int;
   public var style(default, null) : IStyle;
