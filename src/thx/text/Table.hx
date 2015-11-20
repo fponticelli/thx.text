@@ -61,6 +61,11 @@ class Table {
     return collector;
   }
 
+  public function toString() {
+    var renderer = new Renderer();
+    return renderer.render(this);
+  }
+
   function get_rows()
     return _rows.length;
 
