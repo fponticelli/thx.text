@@ -5,6 +5,7 @@ using thx.text.Table;
 using thx.text.table.Canvas;
 using thx.text.table.Renderer;
 using thx.text.table.Style;
+using thx.text.table.CellValue;
 
 class TestTable {
   public function new() { }
@@ -38,13 +39,72 @@ class TestTable {
     table.style.type = Body;
     table.getRow(0).style.type = Header;
     var s = renderer.render(table);
-    trace('$s');
     Assert.equals("
 ┏━━━━━━━━━━━━┳━━━┳━━━━━┓
-┃ Franco     ┃ ✓ ┃ ✕   ┃
+┃ Franco     ┃ ✓ ┃  ✕  ┃
 ┡━━━━━━━━━━━━╇━━━╇━━━━━┩
 │ 11/19/2015 │   │ 200 │
 └────────────┘   └─────┘", s);
+  }
+
+  function oneCell(value : CellValue, width : Int) {
+    table = new Table();
+    table.style.type = Body;
+    table.style.minWidth = width;
+    table.set(value, 0, 0);
+  }
+
+  public function testAlign() {
+    oneCell(0, 8);
+    Assert.equals("
+┌──────────┐
+│        0 │
+└──────────┘", table.toString());
+    oneCell("0", 8);
+    Assert.equals("
+┌──────────┐
+│ 0        │
+└──────────┘", table.toString());
+    oneCell(true, 8);
+    Assert.equals("
+┌──────────┐
+│    ✓     │
+└──────────┘", table.toString());
+    oneCell(0.5, 8);
+    Assert.equals("
+┌──────────┐
+│      0.5 │
+└──────────┘", table.toString());
+  }
+
+  public function testAlignOnSymbol() {
+    table.set(0.001, 0, 0);
+    table.set(2.0,   0, 1);
+    table.set(3333,  0, 2);
+    table.set(12.5,  0, 3);
+    table.style.type = Body;
+    Assert.equals("
+┌───────┬─────┬───────┬──────┐
+│ 0.001 │ 2.0 │ 3,333 │ 12.5 │
+└───────┴─────┴───────┴──────┘", table.toString());
+  }
+
+  public function testAlignOnSymbolVertical() {
+    table.set(0.001, 0, 0);
+    table.set(2.0,   1, 0);
+    table.set(3333,  2, 0);
+    table.set(12.5,  3, 0);
+    table.style.type = Body;
+    Assert.equals("
+┌───────────┐
+│     0.001 │
+├───────────┤
+│     2.0   │
+├───────────┤
+│ 3,333     │
+├───────────┤
+│    12.5   │
+└───────────┘", table.toString());
   }
 
   public function testSequence() {
