@@ -1,14 +1,11 @@
-import utest.Runner;
+import utest.UTest;
 import utest.ui.Report;
 
 class TestAll {
   public static function main() {
-    var runner = new Runner();
-
-    runner.addCase(new thx.text.TestInflections());
-
-    Report.create(runner);
-
-    runner.run();
+    UTest.run([
+      new thx.text.TestInflections(),
+      new thx.text.TestTable()
+    ]);
   }
 }

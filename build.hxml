@@ -1,8 +1,11 @@
 -cp test
 -cp src
 -lib thx.core
+-lib thx.format
+-lib thx.culture
 -lib utest
 -main TestAll
 -js bin/test.js
+-debug
 
 -cmd node bin/test.js
