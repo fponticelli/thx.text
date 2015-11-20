@@ -4,6 +4,9 @@ abstract CellValue(CellValueImpl) from CellValueImpl to CellValueImpl {
   @:from inline public static function fromInt(v : Int) : CellValue
     return IntCell(v);
 
+  @:from inline public static function fromFloat(v : Float) : CellValue
+    return FloatCell(v);
+
   @:from inline public static function fromString(v : String) : CellValue
     return StringCell(v);
 
