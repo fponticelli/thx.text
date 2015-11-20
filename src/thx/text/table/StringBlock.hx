@@ -31,6 +31,18 @@ class StringBlock {
     return lines[index].toArray();
   }
 
+  public function symbolPos(s : String) {
+    var max = 0,
+        pos;
+    for(line in lines) {
+      pos = line.lastIndexOf(s);
+      if(pos <= 0)
+        continue;
+      max = max.max(line.length - pos);
+    }
+    return max;
+  }
+
   public function toString() {
     return lines.join("\n");
   }

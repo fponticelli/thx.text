@@ -59,12 +59,29 @@ class Canvas {
     combine(x, y, Char(char));
   }
 
-  public function paintBlock(block : StringBlock, x : Int, y : Int) {
+  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, halign : CellAlign, symbolPos : Int) {
     for(i in 0...block.height) {
-      var line = block.getLine(i);
-      for(j in 0...line.length) {
-        setChar(x + j, y + i, line[j]);
-      }
+      var line = block.getLine(i),
+          len = line.length;
+      var offset = switch halign {
+        case Left:
+          0;
+        case Right:
+          width - len;
+        case Center:
+          Math.floor((width - len) / 2);
+        case OnSymbol(s):
+          var pos = line.lastIndexOf(s);
+          if(pos < 0)
+            width - (len + symbolPos);
+          else if((len - pos) < symbolPos)
+            width - len - (symbolPos - (len - pos));
+          else
+            width - len;
+      };
+
+      for(j in 0...len)
+        setChar(x + offset + j, y + i, line[j]);
     }
   }
 

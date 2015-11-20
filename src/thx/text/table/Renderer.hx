@@ -33,6 +33,7 @@ class Renderer {
   var canvas : Canvas;
   var colWidths : Array<Int>;
   var rowHeights : Array<Int>;
+  var symbolPos : Array<Int>;
   var table : Table;
   public function new(?padding : Int = 1) {
     this.padding = padding;
@@ -47,22 +48,36 @@ class Renderer {
 
   function processContents() {
     colWidths = [for(i in 0...table.cols) 0];
+    symbolPos = [for(i in 0...table.cols) 0];
     rowHeights = [for(i in 0...table.rows) 0];
     var cells = table.toArray().order(function(a, b) return Enums.compare(b.style.type, a.style.type)),
         blocks = cells.map(function(cell) {
           var maxWidth = cell.style.maxWidth,
-              maxHeight = cell.style.maxHeight; // TODO account for padding
+              maxHeight = cell.style.maxHeight,
+              minWidth = cell.style.minWidth,
+              minHeight = cell.style.minHeight; // TODO account for padding
 
           var block = cell.style.formatter(cell.value, maxWidth),
-              width = maxWidth == null ? block.width : maxWidth.min(block.width),
-              height = maxHeight == null ? block.height : maxHeight.min(block.height);
+              halign = cell.style.aligner(cell.value, cell.style.type),
+              width = (maxWidth == null ? block.width : maxWidth.min(block.width)).max(minWidth),
+              height = (maxHeight == null ? block.height : maxHeight.min(block.height)).max(minHeight);
 
-          colWidths[cell.col.index] = colWidths[cell.col.index].max(width);
+          // find max pos of symbol aligner
+          switch halign {
+            case OnSymbol(s):
+              var pos = block.symbolPos(s);
+              symbolPos[cell.col.index] = symbolPos[cell.col.index].max(pos);
+              var extra = symbolPos[cell.col.index] - pos;
+              colWidths[cell.col.index] = colWidths[cell.col.index].max(width + extra);
+            case _:
+              colWidths[cell.col.index] = colWidths[cell.col.index].max(width);
+          }
           rowHeights[cell.row.index] = rowHeights[cell.row.index].max(height);
 
           return {
             block : block,
-            cell : cell
+            cell : cell,
+            halign : halign
           }
         });
     // resize canvas
@@ -74,17 +89,15 @@ class Renderer {
     blocks.each(function(item) {
       // get x, y
       var x = colWidths.slice(0, item.cell.col.index).reduce(reduceWidth, 0),
-          y = rowHeights.slice(0, item.cell.row.index).reduce(reduceHeight, 0);
-      // trace(item.block.toString());
-      // trace(item.cell.col.index, item.cell.row.index);
-      // trace(x, y);
+          y = rowHeights.slice(0, item.cell.row.index).reduce(reduceHeight, 0),
+          width = colWidths[item.cell.col.index];
 
       // TODO
       // * consider max height and height
       // * consider valign
       // * consider halign
       // paint content
-      canvas.paintBlock(item.block, x + 1 + padding, y + 1);
+      canvas.paintBlock(item.block, x + 1 + padding, y + 1, width, item.halign, symbolPos[item.cell.col.index]);
 
       // paint borders
       var w = colWidths[item.cell.col.index] + (1 + padding) * 2,
