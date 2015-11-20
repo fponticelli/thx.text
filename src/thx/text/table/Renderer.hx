@@ -22,13 +22,6 @@ TODO
     ? top
     ? middle
     ? bottom
-  ? borders
-    ? horizontal
-    ? vertical
-    ? corners
-    ? cross
-    ? partial cross
-    ? cross between types
   ? maxheight
     ? crop
   ? maxwidth
@@ -49,7 +42,7 @@ class Renderer {
     this.table = table;
     canvas = new Canvas(0, 0);
     processContents();
-    return canvas.toString();
+    return "\n" + canvas.toString();
   }
 
   function processContents() {
@@ -86,11 +79,11 @@ class Renderer {
       // trace(item.cell.col.index, item.cell.row.index);
       // trace(x, y);
 
-      // paint content
       // TODO
       // * consider max height and height
       // * consider valign
       // * consider halign
+      // paint content
       canvas.paintBlock(item.block, x + 1 + padding, y + 1);
 
       // paint borders

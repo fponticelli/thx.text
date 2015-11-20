@@ -33,10 +33,18 @@ class TestTable {
     table.set(true, 0, 1);
     table.set("Franco", 0, 0);
     table.set(false, 0, 2);
-    table.set(Date.now(), 1, 0);
+    table.set(Date.fromString("2015-11-19"), 1, 0);
     table.set(200, 1, 2);
+    table.style.type = Body;
+    table.getRow(0).style.type = Header;
     var s = renderer.render(table);
-    trace('\n$s');
+    trace('$s');
+    Assert.equals("
+┏━━━━━━━━━━━━┳━━━┳━━━━━┓
+┃ Franco     ┃ ✓ ┃ ✕   ┃
+┡━━━━━━━━━━━━╇━━━╇━━━━━┩
+│ 11/19/2015 │   │ 200 │
+└────────────┘   └─────┘", s);
   }
 
   public function testSequence() {

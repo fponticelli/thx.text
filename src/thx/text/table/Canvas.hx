@@ -69,7 +69,6 @@ class Canvas {
   }
 
   public function paintBorder(type : CellType, x : Int, y : Int, w : Int, h : Int) {
-    trace(w, h, x, y);
     // topleft
     combine(x, y, pickTopLeft(type));
     // topright
