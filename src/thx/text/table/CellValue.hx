@@ -1,5 +1,12 @@
 package thx.text.table;
 
+import thx.Types;
+import thx.Floats;
+import thx.Ints;
+import thx.Bools;
+import thx.DateTime;
+import thx.Time;
+
 abstract CellValue(CellValueImpl) from CellValueImpl to CellValueImpl {
   @:from inline public static function fromInt(v : Int) : CellValue
     return IntCell(v);
@@ -21,6 +28,38 @@ abstract CellValue(CellValueImpl) from CellValueImpl to CellValueImpl {
 
   @:from inline public static function fromTime(v : Time) : CellValue
     return TimeCell(v);
+
+  public static function fromDynamic(value : Dynamic) : CellValue {
+    if(null == value)
+      return Empty;
+    return switch Types.valueTypeToString(value) {
+      case "String": parseString(value);
+      case "Bool": BoolCell(value);
+      case "Int": IntCell(value);
+      case "Float": FloatCell(value);
+      case "Date": DateTimeCell((value : Date));
+      case _: StringCell(Std.string(value));
+    };
+  }
+
+  public static function parseString(value : String) : CellValue {
+    if(null == value)
+      return Empty;
+    return switch value.toLowerCase() {
+      case "true", "t", "on", "✓":
+        BoolCell(true);
+      case "false", "f", "off", "✕":
+        BoolCell(false);
+      case i if(Ints.canParse(i)):
+        IntCell(Ints.parse(i));
+      case f if(Floats.canParse(f)):
+        FloatCell(Ints.parse(f));
+      case _:
+        try DateTimeCell(DateTime.fromString(value)) catch(_ : Dynamic)
+        try TimeCell(Time.fromString(value)) catch(_ : Dynamic)
+            StringCell(value);
+    }
+  }
 
   inline public static function empty() : CellValue
     return Empty;
