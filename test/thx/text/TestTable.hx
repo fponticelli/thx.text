@@ -15,6 +15,54 @@ class TestTable {
     table = new Table();
   }
 
+  public function testSpanRight() {
+    table.style.type = Body;
+    table.style.setAlign(Center);
+    table.set(1, 0, 0, SpanRight(2));
+    table.set(2, 1, 0);
+    table.set(3, 1, 1);
+    Assert.equals("
+┌───────┐
+│   1   │
+├───┬───┤
+│ 2 │ 3 │
+└───┴───┘", table.toString());
+  }
+
+  public function testSpanDown() {
+    table.style.type = Body;
+    table.style.setAlign(Center);
+    table.set(1, 0, 0, SpanDown(2));
+    table.set(2, 0, 1);
+    table.set(3, 1, 1);
+    Assert.equals("
+┌───┬───┐
+│ 1 │ 2 │
+│   ├───┤
+│   │ 3 │
+└───┴───┘", table.toString());
+  }
+
+  public function testSpanning() {
+    table.style.type = Body;
+    table.style.setAlign(Center);
+    table.set("0/0", 0, 0);
+    table.set("0/1", 0, 1, SpanBoth(2, 2));
+    table.set("0/3", 0, 3, SpanDown(2));
+    table.set("1/0", 1, 0);
+    table.set("2/0", 2, 0, SpanRight(2));
+    table.set("2/2", 2, 2, SpanRight(2));
+
+    Assert.equals("
+┌─────┬─────┬─────┐
+│ 0/0 │ 0/1 │ 0/3 │
+├─────┤     │     │
+│ 1/0 │     │     │
+├─────┴──┬──┴─────┤
+│  2/0   │  2/2   │
+└────────┴────────┘", table.toString());
+  }
+
   public function testFromData() {
     var data : Array<Array<Dynamic>> = [
       ["rank", "country", "US $"],
@@ -30,55 +78,53 @@ class TestTable {
       [10, "Netherlands", 50355]
     ];
     var table = Table.fromData(data, "average earnings");
-    trace(table.toString());
     Assert.equals("
-┏━━━━━━━━━━━━━━━━━━┓
-┃ average earnings ┃
-┣━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
-┃ rank             ┃ country               ┃ US $    ┃
-┡━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
-│                1 │ Luxembourg            │ 113,533 │
-│                2 │ Qatar                 │  98,329 │
-│                3 │ Norway                │  97,255 │
-│                4 │ Switzerland           │  81,161 │
-│                5 │ United Arab  Emirates │  67,008 │
-│                6 │ Australia             │  65,477 │
-│                7 │ Denmark               │  59,928 │
-│                8 │ Sweden                │  56,956 │
-│                9 │ Canada                │  50,436 │
-│               10 │ Netherlands           │  50,355 │
-└──────────────────┴───────────────────────┴─────────┘", table.toString());
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃            average earnings            ┃
+┣━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┫
+┃ rank ┃ country               ┃ US $    ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+│    1 │ Luxembourg            │ 113,533 │
+│    2 │ Qatar                 │  98,329 │
+│    3 │ Norway                │  97,255 │
+│    4 │ Switzerland           │  81,161 │
+│    5 │ United Arab  Emirates │  67,008 │
+│    6 │ Australia             │  65,477 │
+│    7 │ Denmark               │  59,928 │
+│    8 │ Sweden                │  56,956 │
+│    9 │ Canada                │  50,436 │
+│   10 │ Netherlands           │  50,355 │
+└──────┴───────────────────────┴─────────┘", table.toString());
   }
 
   public function testFromObjects() {
     var data = [{
-        countryCode: "AD",
+        code: "AD",
         latitude: 42.5,
         longitude: 1.6,
         name: "Andorra"
       }, {
-        countryCode: "AE",
+        code: "AE",
         latitude: 23.4,
         longitude: 53.8,
         name: "United Arab Emirates"
       }, {
-        countryCode: "AF",
+        code: "AF",
         latitude: 33.9,
         longitude: 67.7,
         name: "Afghanistan"
     }];
     var table = Table.fromObjects(data, "countries");
-    trace(table.toString());
     Assert.equals("
-┏━━━━━━━━━━━━━┓
-┃  countries  ┃
-┣━━━━━━━━━━━━━╋━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
-┃ countryCode ┃ latitude ┃ longitude ┃ name                 ┃
-┡━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
-│ AD          │     42.5 │       1.6 │ Andorra              │
-│ AE          │     23.4 │      53.8 │ United Arab Emirates │
-│ AF          │     33.9 │      67.7 │ Afghanistan          │
-└─────────────┴──────────┴───────────┴──────────────────────┘", table.toString());
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                     countries                      ┃
+┣━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┫
+┃ code ┃ latitude ┃ longitude ┃ name                 ┃
+┡━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ AD   │     42.5 │       1.6 │ Andorra              │
+│ AE   │     23.4 │      53.8 │ United Arab Emirates │
+│ AF   │     33.9 │      67.7 │ Afghanistan          │
+└──────┴──────────┴───────────┴──────────────────────┘", table.toString());
   }
 
   public function testPaintBorder() {
@@ -262,50 +308,4 @@ class TestTable {
     Assert.isTrue(cell.row.table == table);
     Assert.isTrue(cell.col.table == table);
   }
-/*
-  public function testTableSize() {
-    var table = new Table();
-    table.set(Cell.empty(), 3, 2);
-    Assert.equals(4, table.rows);
-    Assert.equals(3, table.cols);
-    table.set(Cell.empty(SpanBoth(2, 3)), 4, 3);
-    Assert.equals(6, table.rows);
-    Assert.equals(6, table.cols);
-  }
-
-  public function testToString() {
-    var table = new Table();
-    table.set(Cell.string("X"), 0, 0);
-    table.set(Cell.int(1), 1, 1);
-    table.set(Cell.float(0.1), 2, 2);
-    trace("\n"+table.toString());
-  }
-
-  public function testSimpleSpanning() {
-    var table = new Table();
-    table.set(Cell.string("0/0"), 0, 0);
-    table.set(Cell.string("0/1"), 0, 1);
-    table.set(Cell.string("1/0", SpanHorizontal(2)), 1, 0);
-
-    trace("\n"+table.toString());
-
-    table = new Table();
-    table.set(Cell.string("0/0"), 0, 0);
-    table.set(Cell.string("0/1", SpanVertical(2)), 0, 1);
-    table.set(Cell.string("1/0"), 1, 0);
-
-    trace("\n"+table.toString());
-  }
-
-  public function testSpanning() {
-    var table = new Table();
-    table.set(Cell.string("0/0"), 0, 0);
-    table.set(Cell.string("0/1", SpanBoth(2, 2)), 0, 1);
-    table.set(Cell.string("0/2", SpanVertical(2)), 0, 2);
-    table.set(Cell.string("1/0"), 1, 0);
-    table.set(Cell.string("2/0", SpanHorizontal(2)), 2, 0);
-    table.set(Cell.string("2/2", SpanHorizontal(2)), 2, 2);
-    trace("\n"+table.toString());
-  }
-*/
 }

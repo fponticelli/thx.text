@@ -59,11 +59,11 @@ class Canvas {
     combine(x, y, Char(char));
   }
 
-  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, halign : HAlign, symbolPos : Int) {
+  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, height : Int, halign : HAlign, symbolPos : Int) {
     for(i in 0...block.height) {
       var line = block.getLine(i),
           len = line.length;
-      var offset = switch halign {
+      var hoffset = switch halign {
         case Left:
           0;
         case Right:
@@ -81,7 +81,7 @@ class Canvas {
       };
 
       for(j in 0...len)
-        setChar(x + offset + j, y + i, line[j]);
+        setChar(x + hoffset + j, y + i, line[j]);
     }
   }
 
@@ -174,183 +174,183 @@ class Canvas {
            Border(RemovableCross(None, None, None, None)): " ";
 
       // one
-    case Border(Cross(Double, None, None, None)),
-         Border(RemovableCross(Double, None, None, None)): "╹";
-    case Border(Cross(Normal, None, None, None)),
-         Border(RemovableCross(Normal, None, None, None)): "╵";
-    case Border(Cross(None, Double, None, None)),
-         Border(RemovableCross(None, Double, None, None)): "╺";
-    case Border(Cross(None, Normal, None, None)),
-         Border(RemovableCross(None, Normal, None, None)): "╶";
-    case Border(Cross(None, None, Double, None)),
-         Border(RemovableCross(None, None, Double, None)): "╻";
-    case Border(Cross(None, None, Normal, None)),
-         Border(RemovableCross(None, None, Normal, None)): "╷";
-    case Border(Cross(None, None, None, Double)),
-         Border(RemovableCross(None, None, None, Double)): "╸";
-    case Border(Cross(None, None, None, Normal)),
-         Border(RemovableCross(None, None, None, Normal)): "╴";
+      case Border(Cross(Double, None, None, None)),
+           Border(RemovableCross(Double, None, None, None)): "╹";
+      case Border(Cross(Normal, None, None, None)),
+           Border(RemovableCross(Normal, None, None, None)): "╵";
+      case Border(Cross(None, Double, None, None)),
+           Border(RemovableCross(None, Double, None, None)): "╺";
+      case Border(Cross(None, Normal, None, None)),
+           Border(RemovableCross(None, Normal, None, None)): "╶";
+      case Border(Cross(None, None, Double, None)),
+           Border(RemovableCross(None, None, Double, None)): "╻";
+      case Border(Cross(None, None, Normal, None)),
+           Border(RemovableCross(None, None, Normal, None)): "╷";
+      case Border(Cross(None, None, None, Double)),
+           Border(RemovableCross(None, None, None, Double)): "╸";
+      case Border(Cross(None, None, None, Normal)),
+           Border(RemovableCross(None, None, None, Normal)): "╴";
 
-    // two A
-    case Border(Cross(None, None, Double, Double)),
-         Border(RemovableCross(None, None, Double, Double)): "┓";
-    case Border(Cross(None, None, Normal, Normal)),
-         Border(RemovableCross(None, None, Normal, Normal)): "┐";
-    case Border(Cross(None, Double, None, Double)),
-         Border(RemovableCross(None, Double, None, Double)): "━";
-    case Border(Cross(None, Normal, None, Normal)),
-         Border(RemovableCross(None, Normal, None, Normal)): "─";
-    case Border(Cross(None, Double, Double, None)),
-         Border(RemovableCross(None, Double, Double, None)): "┏";
-    case Border(Cross(None, Normal, Normal, None)),
-         Border(RemovableCross(None, Normal, Normal, None)): "┌";
-    case Border(Cross(Double, None, Double, None)),
-         Border(RemovableCross(Double, None, Double, None)): "┃";
-    case Border(Cross(Normal, None, Normal, None)),
-         Border(RemovableCross(Normal, None, Normal, None)): "│";
-    case Border(Cross(Double, None, None, Double)),
-         Border(RemovableCross(Double, None, None, Double)): "┛";
-    case Border(Cross(Normal, None, None, Normal)),
-         Border(RemovableCross(Normal, None, None, Normal)): "┘";
-    case Border(Cross(Double, Double, None, None)),
-         Border(RemovableCross(Double, Double, None, None)): "┗";
-    case Border(Cross(Normal, Normal, None, None)),
-         Border(RemovableCross(Normal, Normal, None, None)): "└";
+      // two A
+      case Border(Cross(None, None, Double, Double)),
+           Border(RemovableCross(None, None, Double, Double)): "┓";
+      case Border(Cross(None, None, Normal, Normal)),
+           Border(RemovableCross(None, None, Normal, Normal)): "┐";
+      case Border(Cross(None, Double, None, Double)),
+           Border(RemovableCross(None, Double, None, Double)): "━";
+      case Border(Cross(None, Normal, None, Normal)),
+           Border(RemovableCross(None, Normal, None, Normal)): "─";
+      case Border(Cross(None, Double, Double, None)),
+           Border(RemovableCross(None, Double, Double, None)): "┏";
+      case Border(Cross(None, Normal, Normal, None)),
+           Border(RemovableCross(None, Normal, Normal, None)): "┌";
+      case Border(Cross(Double, None, Double, None)),
+           Border(RemovableCross(Double, None, Double, None)): "┃";
+      case Border(Cross(Normal, None, Normal, None)),
+           Border(RemovableCross(Normal, None, Normal, None)): "│";
+      case Border(Cross(Double, None, None, Double)),
+           Border(RemovableCross(Double, None, None, Double)): "┛";
+      case Border(Cross(Normal, None, None, Normal)),
+           Border(RemovableCross(Normal, None, None, Normal)): "┘";
+      case Border(Cross(Double, Double, None, None)),
+           Border(RemovableCross(Double, Double, None, None)): "┗";
+      case Border(Cross(Normal, Normal, None, None)),
+           Border(RemovableCross(Normal, Normal, None, None)): "└";
 
-    // two A+B
-    case Border(Cross(None, None, Double, Normal)),
-         Border(RemovableCross(None, None, Double, Normal)): "┒";
-    case Border(Cross(None, None, Normal, Double)),
-         Border(RemovableCross(None, None, Normal, Double)): "┑";
-    case Border(Cross(None, Double, None, Normal)),
-         Border(RemovableCross(None, Double, None, Normal)): "╼";
-    case Border(Cross(None, Normal, None, Double)),
-         Border(RemovableCross(None, Normal, None, Double)): "╾";
-    case Border(Cross(None, Double, Normal, None)),
-         Border(RemovableCross(None, Double, Normal, None)): "┍";
-    case Border(Cross(None, Normal, Double, None)),
-         Border(RemovableCross(None, Normal, Double, None)): "┎";
-    case Border(Cross(Double, None, Normal, None)),
-         Border(RemovableCross(Double, None, Normal, None)): "╿";
-    case Border(Cross(Normal, None, Double, None)),
-         Border(RemovableCross(Normal, None, Double, None)): "╽";
-    case Border(Cross(Double, None, None, Normal)),
-         Border(RemovableCross(Double, None, None, Normal)): "┚";
-    case Border(Cross(Normal, None, None, Double)),
-         Border(RemovableCross(Normal, None, None, Double)): "┙";
-    case Border(Cross(Double, Normal, None, None)),
-         Border(RemovableCross(Double, Normal, None, None)): "┖";
-    case Border(Cross(Normal, Double, None, None)),
-         Border(RemovableCross(Normal, Double, None, None)): "┕";
+      // two A+B
+      case Border(Cross(None, None, Double, Normal)),
+           Border(RemovableCross(None, None, Double, Normal)): "┒";
+      case Border(Cross(None, None, Normal, Double)),
+           Border(RemovableCross(None, None, Normal, Double)): "┑";
+      case Border(Cross(None, Double, None, Normal)),
+           Border(RemovableCross(None, Double, None, Normal)): "╼";
+      case Border(Cross(None, Normal, None, Double)),
+           Border(RemovableCross(None, Normal, None, Double)): "╾";
+      case Border(Cross(None, Double, Normal, None)),
+           Border(RemovableCross(None, Double, Normal, None)): "┍";
+      case Border(Cross(None, Normal, Double, None)),
+           Border(RemovableCross(None, Normal, Double, None)): "┎";
+      case Border(Cross(Double, None, Normal, None)),
+           Border(RemovableCross(Double, None, Normal, None)): "╿";
+      case Border(Cross(Normal, None, Double, None)),
+           Border(RemovableCross(Normal, None, Double, None)): "╽";
+      case Border(Cross(Double, None, None, Normal)),
+           Border(RemovableCross(Double, None, None, Normal)): "┚";
+      case Border(Cross(Normal, None, None, Double)),
+           Border(RemovableCross(Normal, None, None, Double)): "┙";
+      case Border(Cross(Double, Normal, None, None)),
+           Border(RemovableCross(Double, Normal, None, None)): "┖";
+      case Border(Cross(Normal, Double, None, None)),
+           Border(RemovableCross(Normal, Double, None, None)): "┕";
 
-    // three A
-    case Border(Cross(None, Double, Double, Double)),
-         Border(RemovableCross(None, Double, Double, Double)): "┳";
-    case Border(Cross(None, Normal, Normal, Normal)),
-         Border(RemovableCross(None, Normal, Normal, Normal)): "┬";
-    case Border(Cross(Double, None, Double, Double)),
-         Border(RemovableCross(Double, None, Double, Double)): "┫";
-    case Border(Cross(Normal, None, Normal, Normal)),
-         Border(RemovableCross(Normal, None, Normal, Normal)): "┤";
-    case Border(Cross(Double, Double, None, Double)),
-         Border(RemovableCross(Double, Double, None, Double)): "┻";
-    case Border(Cross(Normal, Normal, None, Normal)),
-         Border(RemovableCross(Normal, Normal, None, Normal)): "┴";
-    case Border(Cross(Double, Double, Double, None)),
-         Border(RemovableCross(Double, Double, Double, None)): "┣";
-    case Border(Cross(Normal, Normal, Normal, None)),
-         Border(RemovableCross(Normal, Normal, Normal, None)): "├";
+      // three A
+      case Border(Cross(None, Double, Double, Double)),
+           Border(RemovableCross(None, Double, Double, Double)): "┳";
+      case Border(Cross(None, Normal, Normal, Normal)),
+           Border(RemovableCross(None, Normal, Normal, Normal)): "┬";
+      case Border(Cross(Double, None, Double, Double)),
+           Border(RemovableCross(Double, None, Double, Double)): "┫";
+      case Border(Cross(Normal, None, Normal, Normal)),
+           Border(RemovableCross(Normal, None, Normal, Normal)): "┤";
+      case Border(Cross(Double, Double, None, Double)),
+           Border(RemovableCross(Double, Double, None, Double)): "┻";
+      case Border(Cross(Normal, Normal, None, Normal)),
+           Border(RemovableCross(Normal, Normal, None, Normal)): "┴";
+      case Border(Cross(Double, Double, Double, None)),
+           Border(RemovableCross(Double, Double, Double, None)): "┣";
+      case Border(Cross(Normal, Normal, Normal, None)),
+           Border(RemovableCross(Normal, Normal, Normal, None)): "├";
 
-    // three A + B
-    case Border(Cross(None, Double, Normal, Normal)),
-         Border(RemovableCross(None, Double, Normal, Normal)): "┮";
-    case Border(Cross(None, Normal, Double, Normal)),
-         Border(RemovableCross(None, Normal, Double, Normal)): "┰";
-    case Border(Cross(None, Normal, Normal, Double)),
-         Border(RemovableCross(None, Normal, Normal, Double)): "┭";
-    case Border(Cross(None, Double, Double, Normal)),
-         Border(RemovableCross(None, Double, Double, Normal)): "┲";
-    case Border(Cross(None, Double, Normal, Double)),
-         Border(RemovableCross(None, Double, Normal, Double)): "┯";
-    case Border(Cross(None, Normal, Double, Double)),
-         Border(RemovableCross(None, Normal, Double, Double)): "┱";
+      // three A + B
+      case Border(Cross(None, Double, Normal, Normal)),
+           Border(RemovableCross(None, Double, Normal, Normal)): "┮";
+      case Border(Cross(None, Normal, Double, Normal)),
+           Border(RemovableCross(None, Normal, Double, Normal)): "┰";
+      case Border(Cross(None, Normal, Normal, Double)),
+           Border(RemovableCross(None, Normal, Normal, Double)): "┭";
+      case Border(Cross(None, Double, Double, Normal)),
+           Border(RemovableCross(None, Double, Double, Normal)): "┲";
+      case Border(Cross(None, Double, Normal, Double)),
+           Border(RemovableCross(None, Double, Normal, Double)): "┯";
+      case Border(Cross(None, Normal, Double, Double)),
+           Border(RemovableCross(None, Normal, Double, Double)): "┱";
 
-    case Border(Cross(Double, None, Normal, Normal)),
-         Border(RemovableCross(Double, None, Normal, Normal)): "┦";
-    case Border(Cross(Normal, None, Double, Normal)),
-         Border(RemovableCross(Normal, None, Double, Normal)): "┧";
-    case Border(Cross(Normal, None, Normal, Double)),
-         Border(RemovableCross(Normal, None, Normal, Double)): "┥";
-    case Border(Cross(Double, None, Double, Normal)),
-         Border(RemovableCross(Double, None, Double, Normal)): "┨";
-    case Border(Cross(Double, None, Normal, Double)),
-         Border(RemovableCross(Double, None, Normal, Double)): "┩";
-    case Border(Cross(Normal, None, Double, Double)),
-         Border(RemovableCross(Normal, None, Double, Double)): "┪";
+      case Border(Cross(Double, None, Normal, Normal)),
+           Border(RemovableCross(Double, None, Normal, Normal)): "┦";
+      case Border(Cross(Normal, None, Double, Normal)),
+           Border(RemovableCross(Normal, None, Double, Normal)): "┧";
+      case Border(Cross(Normal, None, Normal, Double)),
+           Border(RemovableCross(Normal, None, Normal, Double)): "┥";
+      case Border(Cross(Double, None, Double, Normal)),
+           Border(RemovableCross(Double, None, Double, Normal)): "┨";
+      case Border(Cross(Double, None, Normal, Double)),
+           Border(RemovableCross(Double, None, Normal, Double)): "┩";
+      case Border(Cross(Normal, None, Double, Double)),
+           Border(RemovableCross(Normal, None, Double, Double)): "┪";
 
-    case Border(Cross(Double, Normal, None, Normal)),
-         Border(RemovableCross(Double, Normal, None, Normal)): "┸";
-    case Border(Cross(Normal, Double, None, Normal)),
-         Border(RemovableCross(Normal, Double, None, Normal)): "┶";
-    case Border(Cross(Normal, Normal, None, Double)),
-         Border(RemovableCross(Normal, Normal, None, Double)): "┵";
-    case Border(Cross(Double, Double, None, Normal)),
-         Border(RemovableCross(Double, Double, None, Normal)): "┺";
-    case Border(Cross(Double, Normal, None, Double)),
-         Border(RemovableCross(Double, Normal, None, Double)): "┹";
-    case Border(Cross(Normal, Double, None, Double)),
-         Border(RemovableCross(Normal, Double, None, Double)): "┷";
+      case Border(Cross(Double, Normal, None, Normal)),
+           Border(RemovableCross(Double, Normal, None, Normal)): "┸";
+      case Border(Cross(Normal, Double, None, Normal)),
+           Border(RemovableCross(Normal, Double, None, Normal)): "┶";
+      case Border(Cross(Normal, Normal, None, Double)),
+           Border(RemovableCross(Normal, Normal, None, Double)): "┵";
+      case Border(Cross(Double, Double, None, Normal)),
+           Border(RemovableCross(Double, Double, None, Normal)): "┺";
+      case Border(Cross(Double, Normal, None, Double)),
+           Border(RemovableCross(Double, Normal, None, Double)): "┹";
+      case Border(Cross(Normal, Double, None, Double)),
+           Border(RemovableCross(Normal, Double, None, Double)): "┷";
 
-    case Border(Cross(Double, Normal, Normal, None)),
-         Border(RemovableCross(Double, Normal, Normal, None)): "┞";
-    case Border(Cross(Normal, Double, Normal, None)),
-         Border(RemovableCross(Normal, Double, Normal, None)): "┝";
-    case Border(Cross(Normal, Normal, Double, None)),
-         Border(RemovableCross(Normal, Normal, Double, None)): "┟";
-    case Border(Cross(Double, Double, Normal, None)),
-         Border(RemovableCross(Double, Double, Normal, None)): "┡";
-    case Border(Cross(Double, Normal, Double, None)),
-         Border(RemovableCross(Double, Normal, Double, None)): "┠";
-    case Border(Cross(Normal, Double, Double, None)),
-         Border(RemovableCross(Normal, Double, Double, None)): "┢";
+      case Border(Cross(Double, Normal, Normal, None)),
+           Border(RemovableCross(Double, Normal, Normal, None)): "┞";
+      case Border(Cross(Normal, Double, Normal, None)),
+           Border(RemovableCross(Normal, Double, Normal, None)): "┝";
+      case Border(Cross(Normal, Normal, Double, None)),
+           Border(RemovableCross(Normal, Normal, Double, None)): "┟";
+      case Border(Cross(Double, Double, Normal, None)),
+           Border(RemovableCross(Double, Double, Normal, None)): "┡";
+      case Border(Cross(Double, Normal, Double, None)),
+           Border(RemovableCross(Double, Normal, Double, None)): "┠";
+      case Border(Cross(Normal, Double, Double, None)),
+           Border(RemovableCross(Normal, Double, Double, None)): "┢";
 
-    // four A
-    case Border(Cross(Double, Double, Double, Double)),
-         Border(RemovableCross(Double, Double, Double, Double)): "╋";
-    case Border(Cross(Normal, Normal, Normal, Normal)),
-         Border(RemovableCross(Normal, Normal, Normal, Normal)): "┼";
+      // four A
+      case Border(Cross(Double, Double, Double, Double)),
+           Border(RemovableCross(Double, Double, Double, Double)): "╋";
+      case Border(Cross(Normal, Normal, Normal, Normal)),
+           Border(RemovableCross(Normal, Normal, Normal, Normal)): "┼";
 
-    // four A + B
-    case Border(Cross(Double, Normal, Normal, Normal)),
-         Border(RemovableCross(Double, Normal, Normal, Normal)): "╀";
-    case Border(Cross(Normal, Double, Normal, Normal)),
-         Border(RemovableCross(Normal, Double, Normal, Normal)): "┾";
-    case Border(Cross(Normal, Normal, Double, Normal)),
-         Border(RemovableCross(Normal, Normal, Double, Normal)): "╁";
-    case Border(Cross(Normal, Normal, Normal, Double)),
-         Border(RemovableCross(Normal, Normal, Normal, Double)): "┽";
+      // four A + B
+      case Border(Cross(Double, Normal, Normal, Normal)),
+           Border(RemovableCross(Double, Normal, Normal, Normal)): "╀";
+      case Border(Cross(Normal, Double, Normal, Normal)),
+           Border(RemovableCross(Normal, Double, Normal, Normal)): "┾";
+      case Border(Cross(Normal, Normal, Double, Normal)),
+           Border(RemovableCross(Normal, Normal, Double, Normal)): "╁";
+      case Border(Cross(Normal, Normal, Normal, Double)),
+           Border(RemovableCross(Normal, Normal, Normal, Double)): "┽";
 
-    case Border(Cross(Double, Double, Normal, Normal)),
-         Border(RemovableCross(Double, Double, Normal, Normal)): "╄";
-    case Border(Cross(Double, Normal, Double, Normal)),
-         Border(RemovableCross(Double, Normal, Double, Normal)): "╂";
-    case Border(Cross(Double, Normal, Normal, Double)),
-         Border(RemovableCross(Double, Normal, Normal, Double)): "╃";
-    case Border(Cross(Normal, Double, Double, Normal)),
-         Border(RemovableCross(Normal, Double, Double, Normal)): "╆";
-    case Border(Cross(Normal, Normal, Double, Double)),
-         Border(RemovableCross(Normal, Normal, Double, Double)): "╅";
-    case Border(Cross(Normal, Double, Normal, Double)),
-         Border(RemovableCross(Normal, Double, Normal, Double)): "┿";
+      case Border(Cross(Double, Double, Normal, Normal)),
+           Border(RemovableCross(Double, Double, Normal, Normal)): "╄";
+      case Border(Cross(Double, Normal, Double, Normal)),
+           Border(RemovableCross(Double, Normal, Double, Normal)): "╂";
+      case Border(Cross(Double, Normal, Normal, Double)),
+           Border(RemovableCross(Double, Normal, Normal, Double)): "╃";
+      case Border(Cross(Normal, Double, Double, Normal)),
+           Border(RemovableCross(Normal, Double, Double, Normal)): "╆";
+      case Border(Cross(Normal, Normal, Double, Double)),
+           Border(RemovableCross(Normal, Normal, Double, Double)): "╅";
+      case Border(Cross(Normal, Double, Normal, Double)),
+           Border(RemovableCross(Normal, Double, Normal, Double)): "┿";
 
-    case Border(Cross(Double, Double, Double, Normal)),
-         Border(RemovableCross(Double, Double, Double, Normal)): "╊";
-    case Border(Cross(Double, Double, Normal, Double)),
-         Border(RemovableCross(Double, Double, Normal, Double)): "╇";
-    case Border(Cross(Double, Normal, Double, Double)),
-         Border(RemovableCross(Double, Normal, Double, Double)): "╉";
-    case Border(Cross(Normal, Double, Double, Double)),
-         Border(RemovableCross(Normal, Double, Double, Double)): "╈";
+      case Border(Cross(Double, Double, Double, Normal)),
+           Border(RemovableCross(Double, Double, Double, Normal)): "╊";
+      case Border(Cross(Double, Double, Normal, Double)),
+           Border(RemovableCross(Double, Double, Normal, Double)): "╇";
+      case Border(Cross(Double, Normal, Double, Double)),
+           Border(RemovableCross(Double, Normal, Double, Double)): "╉";
+      case Border(Cross(Normal, Double, Double, Double)),
+           Border(RemovableCross(Normal, Double, Double, Double)): "╈";
     };
 
   public function toString() {
@@ -372,7 +372,9 @@ class Canvas {
 }
 
 abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
-  public function combine(that : Symbol) : Symbol
+  public function combine(that : Symbol) : Symbol {
+    if(null == this) return that;
+    if(null == that) return this;
     return switch [this, that] {
       case [Border(b1), Border(b2)]:
         Border(mergeBorders(b1, b2));
@@ -380,6 +382,7 @@ abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
       case [_, Empty]: this;
       case [_, _]: that; // TODO don't override?
     };
+  }
 
   public static function mergeBorders(b1 : Border, b2 : Border) return switch [b1, b2] {
     case [RemovableCross(_), Removable]: b1;

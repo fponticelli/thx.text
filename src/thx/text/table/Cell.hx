@@ -22,8 +22,6 @@ class Cell {
 
   public function toString() : String {
     var maxWidth = style.maxWidth;
-    trace(maxWidth);
-    trace(style.formatter);
     return style.formatter(value, maxWidth).toString();
   }
 

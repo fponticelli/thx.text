@@ -5,6 +5,18 @@ import thx.text.table.*;
 import thx.text.table.Style;
 using thx.Strings;
 
+/*
+TODO
+  ? valign
+    ? top
+    ? middle
+    ? bottom
+  ? maxheight
+    ? crop
+  ? maxwidth
+    ? crop
+*/
+
 class Table {
   public static function fromData(data : Array<Array<Dynamic>>, ?hasHeader : Bool = true, ?title : String) {
     var offset = title == null ? 0 : 1,

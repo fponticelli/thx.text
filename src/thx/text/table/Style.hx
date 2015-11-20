@@ -131,9 +131,9 @@ class DefaultStyle implements IStyle {
   public static var instance(default, null) : DefaultStyle = new DefaultStyle();
   public static var defaultType : CellType = BodyCompact;
   public static var defaultMaxHeight : Null<Int> = null;
-  public static var defaultMinHeight : Int = 0;
+  public static var defaultMinHeight : Int = 1;
   public static var defaultMaxWidth : Null<Int> = null;
-  public static var defaultMinWidth : Int = 0;
+  public static var defaultMinWidth : Int = 1;
   public static var defaultCulture : Culture = Embed.culture("en-us");
   public static var defaultIntFormatter : Int -> String = function(v : Int) return NumberFormat.integer(v, defaultCulture);
   public static var defaultFloatFormatter : Float -> String = function(v : Float) return NumberFormat.format(v, "#,#.#####", defaultCulture);
