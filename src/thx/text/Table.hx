@@ -3,6 +3,7 @@ package thx.text;
 import thx.ReadonlyArray;
 import thx.text.table.*;
 import thx.text.table.Style;
+using thx.Strings;
 
 class Table {
   public static function fromData(data : Array<Array<Dynamic>>, ?hasHeader : Bool = true, ?title : String) {
@@ -43,7 +44,7 @@ class Table {
         if(null == col) {
           col = cols++;
           headers.set(field, col);
-          table.set(field, offset, col);
+          table.set(field.humanize(), offset, col);
         }
         table.set(CellValue.fromDynamic(Reflect.field(data[r], field)), r + offset + 1, col);
       }
