@@ -46,9 +46,9 @@ abstract CellValue(CellValueImpl) from CellValueImpl to CellValueImpl {
     if(null == value)
       return Empty;
     return switch value.toLowerCase() {
-      case "true", "t", "on", "✓":
+      case "true", "t", "on", "✓", "✔":
         BoolCell(true);
-      case "false", "f", "off", "✕":
+      case "false", "f", "off", "✕", "✗":
         BoolCell(false);
       case i if(Ints.canParse(i)):
         IntCell(Ints.parse(i));
