@@ -1,0 +1,16 @@
+{
+  "name": "thx.text",
+  "url": "https://github.com/fponticelli/thx.text",
+  "license": "MIT",
+  "classPath": "src",
+  "tags": ["thx", "text", "table", "cross", "std"],
+  "description": "Contains helpers for text like ASCII tables and inflections.",
+  "releasenote": "updated docs.",
+  "version": "0.1.0",
+  "contributors": ["fponticelli"],
+  "dependencies" : {
+    "thx.core" : "",
+    "thx.format" : "",
+    "thx.culture" : ""
+  }
+}
