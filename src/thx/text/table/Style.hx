@@ -172,8 +172,7 @@ class DefaultStyle implements IStyle {
         Center;
       case [_, Header], [StringCell(_), _], [Empty, _]:
         Left;
-      case [BoolCell(_), _], [DateTimeCell(_), _],
-           [TimeCell(_), _], [NA, _]:
+      case [DateTimeCell(_), _], [TimeCell(_), _], [NA, _]:
         Right;
       case [IntCell(_), _], [FloatCell(_), _]:
         OnSymbol(defaultCulture.number.separatorDecimalNumber);
