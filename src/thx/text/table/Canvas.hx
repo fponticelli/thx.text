@@ -7,15 +7,15 @@ using thx.Effects;
 import thx.text.table.Style;
 
 class Canvas {
-  public var width(default, null) : Int;
-  public var height(default, null) : Int;
-  var values : Array<Array<Symbol>>;
-  public function new(width : Int, height : Int) {
+  public var width(default, null): Int = 0;
+  public var height(default, null): Int = 0;
+  var values: Array<Array<Symbol>>;
+  public function new(width: Int, height: Int) {
     values = [];
     expand(width, height);
   }
 
-  public function expand(width : Int, height : Int) {
+  public function expand(width: Int, height: Int) {
     // add rows first if needed
     for(i in this.height...height) {
       values.push([for(j in 0...width) Empty]);
@@ -34,32 +34,32 @@ class Canvas {
     this.height = this.height.max(height);
   }
 
-  public function get(x : Int, y : Int) : Null<Symbol> {
+  public function get(x: Int, y: Int): Null<Symbol> {
     var row = values[y];
     if(null == row)
       return null;
     return row[x];
   }
 
-  public function set(x : Int, y : Int, symbol : Symbol) {
+  public function set(x: Int, y: Int, symbol: Symbol) {
     values[y][x] = symbol;
   }
 
-  public function setChar(x : Int, y : Int, char : String) {
-    //expand(x+1, y+1); // TODO remove
+  public function setChar(x: Int, y: Int, char: String) {
+    // expand(x+1, y+1); // TODO remove
     set(x, y, Char(char));
   }
 
-  public function combine(x : Int, y : Int, symbol : Symbol) {
+  public function combine(x: Int, y: Int, symbol: Symbol) {
     //expand(x+1, y+1);
     values[y][x] = values[y][x].combine(symbol);
   }
 
-  public function combineChar(x : Int, y : Int, char : String) {
+  public function combineChar(x: Int, y: Int, char: String) {
     combine(x, y, Char(char));
   }
 
-  public function paintBlock(block : StringBlock, x : Int, y : Int, width : Int, height : Int, halign : HAlign, symbolPos : Int) {
+  public function paintBlock(block: StringBlock, x: Int, y: Int, width: Int, height: Int, halign: HAlign, symbolPos: Int) {
     for(i in 0...block.height) {
       var line = block.getLine(i),
           len = line.length;
@@ -80,12 +80,13 @@ class Canvas {
             width - len;
       };
 
+
       for(j in 0...len)
         setChar(x + hoffset + j, y + i, line[j]);
     }
   }
 
-  public function paintBorder(type : CellType, x : Int, y : Int, w : Int, h : Int) {
+  public function paintBorder(type: CellType, x: Int, y: Int, w: Int, h: Int) {
     // topleft
     combine(x, y, pickTopLeft(type));
     // topright
@@ -108,7 +109,7 @@ class Canvas {
     }
   }
 
-  public function paintBottomLine(type : CellType, x : Int, y : Int, w : Int) {
+  public function paintBottomLine(type: CellType, x: Int, y: Int, w: Int) {
     combine(x, y, pickBottomLeft(type));
     combine(x + w - 1, y, pickBottomRight(type));
     for(i in 1...w-1) {
@@ -116,56 +117,56 @@ class Canvas {
     }
   }
 
-  function typeToBorder(type : CellType) return switch type {
+  function typeToBorder(type: CellType) return switch type {
     case Header, HeaderCompact: Double;
     case _: Normal;
   };
 
-  public function pickTopLeft(type : CellType) return Border(switch type {
+  public function pickTopLeft(type: CellType) return Border(switch type {
     case Header, Body: Cross(None, typeToBorder(type), typeToBorder(type), None);
     case HeaderCompact: Removable;
     case BodyCompact: RemovableCross(None, None, typeToBorder(type), None);
   });
 
-  public function pickTopRight(type : CellType) return Border(switch type {
+  public function pickTopRight(type: CellType) return Border(switch type {
     case Header, Body: Cross(None, None, typeToBorder(type), typeToBorder(type));
     case HeaderCompact: Removable;
     case BodyCompact: RemovableCross(None, None, typeToBorder(type), None);
   });
 
-  public function pickBottomLeft(type : CellType) return Border(switch type {
+  public function pickBottomLeft(type: CellType) return Border(switch type {
     case Header, Body: Cross(typeToBorder(type), typeToBorder(type), None, None);
     case HeaderCompact: Cross(None, typeToBorder(type), None, None);
     case BodyCompact: RemovableCross(typeToBorder(type), None, None, None);
   });
 
-  public function pickBottomRight(type : CellType) return Border(switch type {
+  public function pickBottomRight(type: CellType) return Border(switch type {
     case Header, Body: Cross(typeToBorder(type), None, None, typeToBorder(type));
     case HeaderCompact: Cross(None, None, None, typeToBorder(type));
     case BodyCompact: RemovableCross(typeToBorder(type), None, None, None);
   });
 
-  public function pickTop(type : CellType) return Border(switch type {
+  public function pickTop(type: CellType) return Border(switch type {
     case Header, Body: Cross(None, typeToBorder(type), None, typeToBorder(type));
     case HeaderCompact, BodyCompact: Removable;
   });
 
-  public function pickBottom(type : CellType) return Border(switch type {
+  public function pickBottom(type: CellType) return Border(switch type {
     case Header, Body, HeaderCompact: Cross(None, typeToBorder(type), None, typeToBorder(type));
     case BodyCompact: Removable;
   });
 
-  public function pickLeft(type : CellType) return Border(switch type {
+  public function pickLeft(type: CellType) return Border(switch type {
     case Header, Body, BodyCompact: Cross(typeToBorder(type), None, typeToBorder(type), None);
     case HeaderCompact: Removable;
   });
 
-  public function pickRight(type : CellType) return Border(switch type {
+  public function pickRight(type: CellType) return Border(switch type {
     case Header, Body, BodyCompact: Cross(typeToBorder(type), None, typeToBorder(type), None);
     case HeaderCompact: Removable;
   });
 
-  public function render(symbol : Symbol)
+  public function render(symbol: Symbol)
     return switch symbol {
       case Char(c): c;
       // empty
@@ -372,7 +373,7 @@ class Canvas {
 }
 
 abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
-  public function combine(that : Symbol) : Symbol {
+  public function combine(that: Symbol): Symbol {
     if(null == this) return that;
     if(null == that) return this;
     return switch [this, that] {
@@ -384,7 +385,7 @@ abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
     };
   }
 
-  public static function mergeBorders(b1 : Border, b2 : Border) return switch [b1, b2] {
+  public static function mergeBorders(b1: Border, b2: Border) return switch [b1, b2] {
     case [RemovableCross(_), Removable]: b1;
     case [Removable, RemovableCross(_)]: b2;
     case [Removable, Removable]: b1;
@@ -401,6 +402,6 @@ abstract Symbol(SymbolImpl) from SymbolImpl to SymbolImpl {
 
 enum SymbolImpl {
   Empty;
-  Char(s : String);
-  Border(b : Border);
+  Char(s: String);
+  Border(b: Border);
 }

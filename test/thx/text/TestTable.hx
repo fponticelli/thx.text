@@ -114,7 +114,7 @@ class TestTable {
         longitude: 67.7,
         name: "Afghanistan"
     }];
-    var table = Table.fromObjects(data, "countries");
+    var table = Table.fromObjects(data, "countries", ["code", "latitude", "longitude", "name"]);
     Assert.equals("
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                     countries                      ┃
@@ -235,6 +235,10 @@ class TestTable {
     Assert.isNull(cstyle.formatter);
     cstyle = new CompositeStyle([style, dstyle]);
     Assert.notNull(cstyle.formatter);
+    style.minWidth = 3;
+    Assert.equals(3, cstyle.minWidth);
+    cstyle.minWidth = 5;
+    Assert.equals(5, cstyle.minWidth);
   }
 
   public function testCanvas() {

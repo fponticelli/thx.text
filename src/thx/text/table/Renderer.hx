@@ -1,6 +1,7 @@
 package thx.text.table;
 
 import thx.text.Table;
+import thx.text.table.Span;
 using thx.Arrays;
 using thx.Enums;
 using thx.Ints;
@@ -29,15 +30,19 @@ class Renderer {
     symbolPos = [for(i in 0...table.cols) 0];
     rowHeights = [for(i in 0...table.rows) 0];
 
-    var cells = table.toArray()
-                  .order(function(a, b) return Enums.compare(b.span, a.span)),
-        blocks = cells.map(function(cell) {
+    var cells = table.toArray();
+    cells.sort(function(a, b) return Spans.compare(b.span, a.span));
+#if (php || java || cs) // TODO why?!
+    cells.reverse();
+#end
+    var blocks = cells.map(function(cell) {
           var maxWidth  = cell.style.maxWidth,
               maxHeight = cell.style.maxHeight,
               minWidth  = cell.style.minWidth,
               minHeight = cell.style.minHeight,
               spanRight = 1,
               spanDown = 1;
+
 
           switch cell.span {
             case SpanRight(c), SpanBoth(_, c) if(c > 1):
@@ -47,6 +52,7 @@ class Renderer {
             case _:
           }
 
+
           switch cell.span {
             case SpanDown(r), SpanBoth(r, _) if(r > 1):
               spanDown = r;
@@ -54,6 +60,7 @@ class Renderer {
               spanDown = cell.table.rows - cell.row.index;
             case _:
           }
+
 
           var block = cell.style.formatter(cell.value, maxWidth),
               halign = cell.style.aligner(cell.value, cell.style.type),
@@ -66,8 +73,9 @@ class Renderer {
               var pos = block.symbolPos(s);
               symbolPos[cell.col.index] = symbolPos[cell.col.index].max(pos);
               var extra = symbolPos[cell.col.index] - pos;
-              if(spanRight == 1)
+              if(spanRight == 1) {
                 colWidths[cell.col.index] = colWidths[cell.col.index].max(width + extra);
+              }
             case _:
               if(spanRight == 1)
                 colWidths[cell.col.index] = colWidths[cell.col.index].max(width);

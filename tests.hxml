@@ -1,0 +1,6 @@
+-cp test
+-lib thx.core
+-lib thx.format
+-lib thx.culture
+-lib utest
+-main TestAll

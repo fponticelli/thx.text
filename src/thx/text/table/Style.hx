@@ -1,19 +1,23 @@
 package thx.text.table;
 
+using thx.Arrays;
+using thx.Functions;
 using thx.Strings;
 using thx.format.DateFormat;
 using thx.format.NumberFormat;
 using thx.format.TimeFormat;
 using thx.culture.Culture;
 using thx.culture.Embed;
+using thx.Options;
+import haxe.ds.Option;
 import thx.text.table.CellValue;
 
 class Style implements IStyle {
   @:isVar public var type(get, set) : CellType;
   @:isVar public var maxHeight(get, set) : Null<Int>;
-  @:isVar public var minHeight(get, set) : Int;
+  @:isVar public var minHeight(get, set) : Null<Int>;
   @:isVar public var maxWidth(get, set) : Null<Int>;
-  @:isVar public var minWidth(get, set) : Int;
+  @:isVar public var minWidth(get, set) : Null<Int>;
   @:isVar public var formatter(get, set) : Formatter;
   @:isVar public var aligner(get, set) : Aligner;
   public function new() {}
@@ -33,10 +37,10 @@ class Style implements IStyle {
   function set_maxHeight(value : Null<Int>) : Null<Int>
     return maxHeight = value;
 
-  function get_minHeight() : Int
+  function get_minHeight() : Null<Int>
     return minHeight;
 
-  function set_minHeight(value : Int) : Int
+  function set_minHeight(value : Null<Int>) : Null<Int>
     return minHeight = value;
 
   function get_maxWidth() : Null<Int>
@@ -45,10 +49,10 @@ class Style implements IStyle {
   function set_maxWidth(value : Null<Int>) : Null<Int>
     return maxWidth = value;
 
-  function get_minWidth() : Int
+  function get_minWidth() : Null<Int>
     return minWidth;
 
-  function set_minWidth(value : Int) : Int
+  function set_minWidth(value : Null<Int>) : Null<Int>
     return minWidth = value;
 
   function get_formatter() : Formatter
@@ -64,67 +68,68 @@ class Style implements IStyle {
     return aligner = value;
 }
 
-class CompositeStyle extends Style {
-  var parents : Array<IStyle>;
+class CompositeStyle implements IStyle {
+  public var type(get, set) : CellType;
+  public var maxHeight(get, set) : Null<Int>;
+  public var minHeight(get, set) : Null<Int>;
+  public var maxWidth(get, set) : Null<Int>;
+  public var minWidth(get, set) : Null<Int>;
+  public var formatter(get, set) : Formatter;
+  public var aligner(get, set) : Aligner;
+  var base : IStyle;
+  var all : Array<IStyle>;
   public function new(parents : Array<IStyle>) {
-    super();
-    this.parents = parents;
+    this.base = new Style();
+    this.all = [base].concat(parents);
   }
 
-  override function get_type()
-    return getProperty("type");
+  function extract<T>(f: IStyle -> Null<T>)
+    return all.findMap(function(v) return Options.ofValue(f(v))).get();
 
-  override function set_type(value : CellType)
-    return type = value;
+  function get_type()
+    return extract.fn(_.type);
 
-  override function get_maxHeight() : Null<Int>
-    return getProperty("maxHeight");
+  function set_type(value : CellType)
+    return base.type = value;
 
-  override function set_maxHeight(value : Null<Int>) : Null<Int>
-    return maxHeight = value;
+  function get_maxHeight() : Null<Int>
+    return extract.fn(_.maxHeight);
 
-  override function get_minHeight() : Int
-    return getProperty("minHeight");
+  function set_maxHeight(value : Null<Int>) : Null<Int>
+    return base.maxHeight = value;
 
-  override function set_minHeight(value : Int) : Int
-    return minHeight = value;
+  function get_minHeight() : Null<Int>
+    return extract.fn(_.minHeight);
 
-  override function get_maxWidth() : Null<Int>
-    return getProperty("maxWidth");
+  function set_minHeight(value : Null<Int>) : Null<Int>
+    return base.minHeight = value;
 
-  override function set_maxWidth(value : Null<Int>) : Null<Int>
-    return maxWidth = value;
+  function get_maxWidth() : Null<Int>
+    return extract.fn(_.maxWidth);
 
-  override function get_minWidth() : Int
-    return getProperty("minWidth");
+  function set_maxWidth(value : Null<Int>) : Null<Int>
+    return base.maxWidth = value;
 
-  override function set_minWidth(value : Int) : Int
-    return minWidth = value;
+  function get_minWidth() : Null<Int>
+    return extract.fn(_.minWidth);
 
-  override function get_formatter() : Formatter
-    return getProperty("formatter");
+  function set_minWidth(value : Null<Int>) : Null<Int>
+    return base.minWidth = value;
 
-  override function set_formatter(value : Formatter) : Formatter
-    return formatter = value;
+  function get_formatter() : Formatter
+    return extract.fn(_.formatter);
 
-  override function get_aligner() : Aligner
-    return getProperty("aligner");
+  function set_formatter(value : Formatter) : Formatter
+    return base.formatter = value;
 
-  override function set_aligner(value : Aligner) : Aligner
-    return aligner = value;
+  function get_aligner() : Aligner
+    return extract.fn(_.aligner);
 
-  // TODO, this should expand to a macro
-  function getProperty<T>(name : String) : Null<T> {
-    var value = Reflect.field(this, name);
-    if(null != value)
-      return value;
-    for(parent in parents) {
-      value = Reflect.getProperty(parent, name);
-      if(null != value)
-        return value;
-    }
-    return null;
-  }
+  function set_aligner(value : Aligner) : Aligner
+    return base.aligner = value;
+
+  public function setAlign(align : HAlign)
+    aligner = function(_, _) return align;
 }
 
 class DefaultStyle implements IStyle {
@@ -182,9 +187,9 @@ class DefaultStyle implements IStyle {
 
   public var type(get, set) : CellType;
   public var maxHeight(get, set) : Null<Int>;
-  public var minHeight(get, set) : Int;
+  public var minHeight(get, set) : Null<Int>;
   public var maxWidth(get, set) : Null<Int>;
-  public var minWidth(get, set) : Int;
+  public var minWidth(get, set) : Null<Int>;
   public var formatter(get, set) : Formatter;
   public var aligner(get, set) : Aligner;
 
@@ -205,10 +210,10 @@ class DefaultStyle implements IStyle {
   function set_maxHeight(value : Null<Int>) : Null<Int>
     return defaultMaxHeight = value;
 
-  function get_minHeight() : Int
+  function get_minHeight() : Null<Int>
     return defaultMinHeight;
 
-  function set_minHeight(value : Int) : Int
+  function set_minHeight(value : Null<Int>) : Null<Int>
     return defaultMinHeight = value;
 
   function get_maxWidth() : Null<Int>
@@ -217,10 +222,10 @@ class DefaultStyle implements IStyle {
   function set_maxWidth(value : Null<Int>) : Null<Int>
     return defaultMaxWidth = value;
 
-  function get_minWidth() : Int
+  function get_minWidth() : Null<Int>
     return defaultMinWidth;
 
-  function set_minWidth(value : Int) : Int
+  function set_minWidth(value : Null<Int>) : Null<Int>
     return defaultMinWidth = value;
 
   function get_formatter() : Formatter
@@ -238,9 +243,9 @@ class DefaultStyle implements IStyle {
 
 interface IStyle {
   public var type(get, set) : CellType;
-  public var minWidth(get, set) : Int;
+  public var minWidth(get, set) : Null<Int>;
   public var maxWidth(get, set) : Null<Int>;
-  public var minHeight(get, set) : Int;
+  public var minHeight(get, set) : Null<Int>;
   public var maxHeight(get, set) : Null<Int>;
   public var formatter(get, set) : Formatter;
   public var aligner(get, set) : Aligner;

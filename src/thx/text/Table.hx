@@ -5,21 +5,9 @@ import thx.text.table.*;
 import thx.text.table.Style;
 using thx.Strings;
 
-/*
-TODO
-  ? valign
-    ? top
-    ? middle
-    ? bottom
-  ? maxheight
-    ? crop
-  ? maxwidth
-    ? crop
-*/
-
 class Table {
-  public static function fromData(data : Array<Array<Dynamic>>, ?hasHeader : Bool = true, ?title : String) {
-    var offset = title == null ? 0 : 1,
+  public static function fromData(data: Array<Array<Dynamic>>, ?hasHeader: Bool = true, ?title: String) {
+    var offset = title == null ? 0: 1,
         table = new Table();
     if(hasHeader) {
       table.ensureRow(offset).style.type = Header;
@@ -38,8 +26,8 @@ class Table {
     return table;
   }
 
-  public static function fromObjects(data : Array<{}>, ?title : String) {
-    var offset = title == null ? 0 : 1,
+  public static function fromObjects(data: Array<{}>, ?title: String, ?columns: Array<String>) {
+    var offset = title == null ? 0: 1,
         table = new Table(),
         headers = new Map(),
         cols = 0;
@@ -50,7 +38,7 @@ class Table {
     }
     table.ensureRow(offset).style.type = Header;
     for(r in 0...data.length) {
-      var fields = Reflect.fields(data[r]);
+      var fields = null == columns ? Reflect.fields(data[r]) : columns;
       for(field in fields) {
         var col = headers.get(field);
         if(null == col) {
@@ -64,12 +52,12 @@ class Table {
     return table;
   }
 
-  public var rows(get, set) : Int;
-  public var cols(get, set) : Int;
-  public var style(default, null) : IStyle;
+  public var rows(get, set): Int;
+  public var cols(get, set): Int;
+  public var style(default, null): IStyle;
 
-  var _rows : Array<Row>;
-  var _cols : Array<Col>;
+  var _rows: Array<Row>;
+  var _cols: Array<Col>;
 
   public function new() {
     _rows = [];
@@ -78,7 +66,7 @@ class Table {
   }
 
   @:access(thx.text.table.Col.setCell)
-  public function set(value : CellValue, row : Int, col : Int, ?span : Span) {
+  public function set(value: CellValue, row: Int, col: Int, ?span: Span) {
     if(null == span)
       span = NoSpan;
     var r = ensureRow(row),
@@ -88,31 +76,31 @@ class Table {
     return cell;
   }
 
-  public function get(row : Int, col : Int) : Null<Cell> {
+  public function get(row: Int, col: Int): Null<Cell> {
     var col = getCol(col);
     if(null == col) return null;
     return col.get(row);
   }
 
-  public function ensureCol(index : Int) : Col {
+  public function ensureCol(index: Int): Col {
     for(i in _cols.length...index+1)
       _cols[i] = new Col(this, i);
     return _cols[index];
   }
 
-  public function ensureRow(index : Int) : Row {
+  public function ensureRow(index: Int): Row {
     for(i in _rows.length...index+1)
       _rows[i] = new Row(this, i);
     return _rows[index];
   }
 
-  public function getCol(index : Int) : Null<Col>
+  public function getCol(index: Int): Null<Col>
     return _cols[index];
 
-  public function getRow(index : Int) : Null<Row>
+  public function getRow(index: Int): Null<Row>
     return _rows[index];
 
-  public function toArray() : Array<Cell> {
+  public function toArray(): Array<Cell> {
     var collector = [];
     for(row in _rows)
       for(cell in row)
@@ -131,12 +119,12 @@ class Table {
   function get_cols()
     return _cols.length;
 
-  function set_rows(value : Int) {
+  function set_rows(value: Int) {
     ensureRow(value + 1);
     return value;
   }
 
-  function set_cols(value : Int) {
+  function set_cols(value: Int) {
     ensureCol(value + 1);
     return value;
   }
