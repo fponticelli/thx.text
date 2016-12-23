@@ -6,7 +6,7 @@
   "tags": ["thx", "text", "table", "cross", "std"],
   "description": "Contains helpers for text like ASCII tables and inflections.",
   "releasenote": "updated docs.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "contributors": ["fponticelli"],
   "dependencies" : {
     "thx.core" : "",

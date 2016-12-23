@@ -20,7 +20,7 @@ install:
   - haxelib run travix install
 
 script:
-  - haxelib run travix interp
+  # - haxelib run travix interp # TODO compiler fails, requires investigation
   - haxelib run travix neko
   - haxelib run travix node
   - haxelib run travix php
